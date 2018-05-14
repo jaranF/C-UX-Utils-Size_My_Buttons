@@ -44,8 +44,16 @@ int main(int argc, const char * argv[]) {
                 printf("<device> ... i.e. \'iPhone 4s\' or \'iPhone X\' or a phone family eg \'iPhone 6\'\n");
                 
             } else {
-                strcpy(fileNameOnly, argv[i]);
+                char keys[] = "mci";
+                unsigned long j;
+                j = strcspn (argv[i],keys);
+                printf ("The first number in str is at position %zu.\n",j);
+                
+                strncpy(fileNameOnly, argv[i], j);
+                fileNameOnly[j] = '\0';
+                int width = atoi(fileNameOnly);
                 printf("fileNameOnly = %s\n", fileNameOnly);
+                printf("\nwidth = %d\n", width + 1);
             }
             printf("arg[%d] = \'%s\'\n", i, argv[i]);
             i++;
