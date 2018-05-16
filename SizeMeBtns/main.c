@@ -14,8 +14,13 @@
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
 
-#define kCardinalOfDigits           4
+
 #define kUnitsLookupLen             3
+struct unitsConversionTable {
+    char unit[3];
+    float conversionWeighting;
+};
+
 char* Executables_Path( char* );
 
 int main(int argc, const char * argv[]) {
@@ -28,16 +33,18 @@ int main(int argc, const char * argv[]) {
 
     float fWidth = 0.0;
     float fHeight = 0.0;
-    float conversionFactor = 1.0;
     float dimensionNumber;
+    float conversionFactor = 1.0;
     int bWidthFound = 0; // FALSE
     char unit[3];
     // It would be nice to have the conversion ratio as part of this array but at moment do not know how to mix chars with floats in multi-dim array
-    const char unitsLookup[kUnitsLookupLen][3] = {
-        {'m',  'm',  0},
-        {'c',  'm',  0},
-        {'i',  'n',  0}
-    };
+    struct unitsConversionTable unitLookup[3];
+    strcpy(unitLookup[0].unit, "mm");
+    unitLookup[0].conversionWeighting = 1.0;
+    strcpy(unitLookup[1].unit, "cm");
+    unitLookup[1].conversionWeighting = 10.0;
+    strcpy(unitLookup[2].unit, "in");
+    unitLookup[2].conversionWeighting = 25.4;
 
     //sort_structs_example();
     Executables_Path(filePath);
@@ -50,19 +57,11 @@ int main(int argc, const char * argv[]) {
         int i = userArgsOffset;
         char switchParamHelp[7];
         char validCharsForOfNumber[12];
-        char validParseableUnitsMM[3];
-        char validParseableUnitsCM[3];
-        char validParseableUnitsIN[3];
         strcpy(validCharsForOfNumber, ".0123456789");
-        strcpy(validParseableUnitsMM, "mm");
-        validParseableUnitsMM[2] = '\0';
-        strcpy(validParseableUnitsCM, "cm");
-        validParseableUnitsCM[2] = '\0';
-        strcpy(validParseableUnitsIN, "in");
-        validParseableUnitsIN[2] = '\0';
+        strcpy(switchParamHelp, "--help");
         unsigned long parseableDimensionSlen;
         
-        strcpy(switchParamHelp, "--help");
+
         while (i < argc) {
             if (strlen(argv[i]) < 3) {
                 i++;
@@ -81,8 +80,8 @@ int main(int argc, const char * argv[]) {
                 strncpy(unit, (argv[i])+ (parseableDimensionSlen - 2) , 2);
                 int j = 0;
                 while (j < kUnitsLookupLen) {
-                    if ( strcmp(unit, unitsLookup[j]) == 0) {
-                        printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, unitsLookup[j]), unit);
+                    if ( strcmp(unit, unitLookup[j].unit) == 0) {
+                        printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, unitLookup[j].unit), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
                         if ( strcmp(unit, "in") == 0 ) {
                             conversionFactor = 25.4;
