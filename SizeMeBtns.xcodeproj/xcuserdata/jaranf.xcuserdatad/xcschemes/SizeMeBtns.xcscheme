@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "0.5in"
+            argument = "3cm"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
