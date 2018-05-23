@@ -13,15 +13,22 @@
 #include <string.h>		/* strcpy   */
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
+#include "calcCSSPixels.h"
+
+int calcCSSPixels(float width, float height, float screenDiagnalSize, int screenPPI);
+int* calcX(float width, float height, float screenDiagnalSize, int screenPPI);
+char* Executables_Path( char* );
 
 
 #define kUnitsLookupLen             3
-struct unitsConversionTable {
-    char unit[3];
-    float conversionWeighting;
-};
+#define kUnitNameBufferSize         3
 
-char* Executables_Path( char* );
+int* calcX(float width, float height, float screenDiagnalSize, int screenPPI){
+  int dimensionsWidthHeight[2] = { 9, 8 };
+  int* dimensionsPointer;
+  dimensionsPointer = dimensionsWidthHeight; // shortcut for dimensionsPointer = &(dimensions[0]);
+  return dimensionsPointer;
+}
 
 int main(int argc, const char * argv[]) {
     int userArgsOffset = 0;
@@ -33,32 +40,26 @@ int main(int argc, const char * argv[]) {
     float fWidth = 0.0;
     float fHeight = 0.0;
     float dimensionNumber;
+    float unitConversionMultiplier;
     int bWidthFound = 0; // FALSE
-    char unit[3];
-    // It would be nice to have the conversion ratio as part of this array but at moment do not know how to mix chars with floats in multi-dim array
-    char unitsTable[3][2][3] = {
-        {{'m',  'm',  '\0'}, 10},
-        {{'c',  'm',  '\0'}, 100},
-        {{'i',  'n',  '\0'}, 254}
+    char unit[kUnitNameBufferSize];
+    int dimWidthHeightCSSPixels[2];
+    int* dimWHPointer = calcX(6.0, 4.5, 5.5, 401);
+    int w = *(dimWHPointer);
+    int h = *(++dimWHPointer);
+    printf("\ndim = %d\n", w );
+    printf("\ndim = %d\n", h );
+    
+    // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
+    // 25.4. But because chars are treated as sign ints when you cast them
+    // to a number type you can't conevert the 25.4 to a whole number using
+    // the most staightforward option which is to multiply by 10. Instead I
+    // used a lower multiplie, i.e. 4, to keep the numbers below 127.
+    char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
+        {{'m',  'm',  '\0'}, 4},
+        {{'c',  'm',  '\0'}, 40},
+        {{'i',  'n',  '\0'}, 98}
     };
-printf("%f", ((float)(unitsTable[2][1][0]) / 10));
-printf("\n");
-char my[3];
-char *pointer;
-pointer = &(unitsTable[2][0][0]);
-strcpy(my, pointer);
-printf("%s",my);
-printf("\n");
-// printf("%d\n", strcmp(my, unitsTable[0][0][0]));
-    struct unitsConversionTable unitLookup[3];
-
-    strcpy(unitLookup[0].unit, "mm");
-    unitLookup[0].conversionWeighting = 1.0;
-    strcpy(unitLookup[1].unit, "cm");
-    unitLookup[1].conversionWeighting = 10.0;
-    strcpy(unitLookup[2].unit, "in");
-    unitLookup[2].conversionWeighting = 25.4;
-
     //sort_structs_example();
     Executables_Path(filePath);
     // printf("\nargv counun %4d\n", argc);
@@ -76,7 +77,7 @@ printf("\n");
         
 
         while (i < argc) {
-            if (strlen(argv[i]) < 3) {
+            if (strlen(argv[i]) < kUnitNameBufferSize) { // Mininum dimension arg length is 3 i.e. 2mm or 1in etc.
                 i++;
                 continue;
             }
@@ -94,10 +95,11 @@ printf("\n");
                 int j = 0;
                 while (j < kUnitsLookupLen) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
-                    if ( strcmp(unit, unitLookup[j].unit) == 0) {
-                        printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, unitLookup[j].unit), unit);
+                    if ( strcmp(unit, &(unitsConversionTable[j][0][0])) == 0) {
+                        printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
-                        dimensionNumber *= unitLookup[j].conversionWeighting;
+                        unitConversionMultiplier = (float)(unitsConversionTable[j][1][0]);
+                        dimensionNumber *= unitConversionMultiplier / 4;
                         if (bWidthFound == 0) {
                             bWidthFound = 1;
                             fWidth = dimensionNumber;
@@ -125,6 +127,7 @@ printf("\n");
         } //end while
         printf("fWidth = %.2f ",  fWidth);
         printf("fHeight = %f ", fHeight);
+        calcCSSPixels(fWidth, fHeight, 5.5, 401);
         strcpy(fileToExamine, filePath); // printf("fileToExamine = %s\n", fileToExamine);
         strcat(fileToExamine, fileNameOnly); // printf("fileToExamine = %s\n", fileToExamine);
 
