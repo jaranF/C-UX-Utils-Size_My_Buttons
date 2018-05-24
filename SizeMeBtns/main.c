@@ -14,21 +14,24 @@
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
 #include "calcCSSPixels.h"
+#include "calcScreenWidthHeight.h"
 
 int calcCSSPixels(float width, float height, float screenDiagnalSize, int screenPPI);
-int* calcX(float width, float height, float screenDiagnalSize, int screenPPI);
+struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSize);
 char* Executables_Path( char* );
 
-
+struct WHDims {
+    float width;
+    float height;
+};
+struct WHPixelDims {
+    int width;
+    int height;
+};
 #define kUnitsLookupLen             3
 #define kUnitNameBufferSize         3
 
-int* calcX(float width, float height, float screenDiagnalSize, int screenPPI){
-  int dimensionsWidthHeight[2] = { 9, 8 };
-  int* dimensionsPointer;
-  dimensionsPointer = dimensionsWidthHeight; // shortcut for dimensionsPointer = &(dimensions[0]);
-  return dimensionsPointer;
-}
+
 
 int main(int argc, const char * argv[]) {
     int userArgsOffset = 0;
@@ -43,12 +46,9 @@ int main(int argc, const char * argv[]) {
     float unitConversionMultiplier;
     int bWidthFound = 0; // FALSE
     char unit[kUnitNameBufferSize];
-    int dimWidthHeightCSSPixels[2];
-    int* dimWHPointer = calcX(6.0, 4.5, 5.5, 401);
-    int w = *(dimWHPointer);
-    int h = *(++dimWHPointer);
-    printf("\ndim = %d\n", w );
-    printf("\ndim = %d\n", h );
+    struct WHDims screenWidthHeight = calcScreenWidthHeight(0.5635, 5.5);
+    printf("\n........\n%7.4f\n%7.4f\n........\n", screenWidthHeight.height, screenWidthHeight.width );
+
     
     // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
     // 25.4. But because chars are treated as sign ints when you cast them
