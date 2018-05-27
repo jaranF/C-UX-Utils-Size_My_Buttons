@@ -13,7 +13,6 @@
 #include <string.h>		/* strcpy   */
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
-#include "deviceDefinitions.h"
 #include "calcCSSPixels.h"
 #include "calcScreenWidthHeight.h"
 
@@ -35,7 +34,7 @@ struct WHPixelDims {
     int height;
 };
 struct DeviceDefn {
-    char deviceName[20];
+    char deviceName[15];
     struct WHPixelDims pixelDims;
     float diagonalScreenSize;
     int ppi;
@@ -45,63 +44,155 @@ struct DeviceDefn {
 int main(int argc, const char * argv[]) {
     int i;
     int userArgsOffset;
-    char switchParamHelp[7];
-    char validCharsForOfNumber[12];    char filePath[PATH_MAX + 1];
+    char filePath[PATH_MAX + 1];
     char fileNameOnly[FILENAME_MAX]; // @Todo : rename
+    
+    char switchParamHelp[7];
+    char validCharsForOfNumber[12];
 
-    float fWidth = 0.0;
-    float fHeight = 0.0;
+
     float dimensionNumber;
-    float unitConversionMultiplier;
     int bWidthFound = 0; // FALSE
+    float unitConversionMultiplier;
     char unit[kUnitNameBufferSize];
+
+    struct DeviceDefn device;
+    struct DeviceDefn devicesArray[kDevicesArrayLen];
     size_t devicesStructLen;
     int j;                              // Used for iteration through devices Struct Array
+    
+    float fWidth = 0.0;
+    float fHeight = 0.0;
+    
     struct WHDims screenWidthHeight = calcScreenWidthHeight(0.5635, 5.5);
     // printf("\n........\n%7.4f\n%7.4f\n........\n", screenWidthHeight.height, screenWidthHeight.width );
 
     
     // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
-    // 25.4. But because chars are treated as sign ints when you cast them
-    // to a number type you can't conevert the 25.4 to a whole number using
-    // the most staightforward option which is to multiply by 10. Instead I
-    // used a lower multiplie, i.e. 4, to keep the numbers below 127.
+    // 25.4 (inch). But because chars are treated as signed ints when you
+    // cast them to a number type you can't convert the 25.4 to a whole
+    // number using the most staightforward option which is to multiply
+    // by 10. Instead I used a lower multiplie, i.e. 4, to keep the
+    // numbers below 127.
     char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
         {{'m',  'm',  '\0'}, 4},
         {{'c',  'm',  '\0'}, 40},
         {{'i',  'n',  '\0'}, 98}
     };
-    struct DeviceDefn* devicesLookupPointer = getDevices();
-    devicesStructLen = sizeof(devicesLookupPointer[0]);
-    printf("devicesStructArray[2] First Struct Item / Struct Len = %zu", devicesStructLen);
-    printf("\n++++++++++\n%s\n__________\n", devicesLookupPointer[2].deviceName);
-    //sort_structs_example();
+    i = 0;
+    strcpy(device.deviceName, "iPhone 5");
+    device.pixelDims.width = 320;
+    device.pixelDims.height = 568;
+    device.diagonalScreenSize = 4;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 5s");
+    device.pixelDims.width = 320;
+    device.pixelDims.height = 568;
+    device.diagonalScreenSize = 4;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 5c");
+    device.pixelDims.width = 320;
+    device.pixelDims.height = 568;
+    device.diagonalScreenSize = 4;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 5SE");
+    device.pixelDims.width = 320;
+    device.pixelDims.height = 568;
+    device.diagonalScreenSize = 4;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 6");
+    device.pixelDims.width = 375;
+    device.pixelDims.height = 667;
+    device.diagonalScreenSize = 4.7;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 6s");
+    device.pixelDims.width = 375;
+    device.pixelDims.height = 667;
+    device.diagonalScreenSize = 4.7;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 7");
+    device.pixelDims.width = 375;
+    device.pixelDims.height = 667;
+    device.diagonalScreenSize = 4.7;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 8");
+    device.pixelDims.width = 375;
+    device.pixelDims.height = 667;
+    device.diagonalScreenSize = 4.7;
+    device.ppi = 326;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 6+");
+    device.pixelDims.width = 414;
+    device.pixelDims.height = 736;
+    device.diagonalScreenSize = 5.51;
+    device.ppi = 401;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 6s+");
+    device.pixelDims.width = 414;
+    device.pixelDims.height = 736;
+    device.diagonalScreenSize = 5.5;
+    device.ppi = 401;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 7+");
+    device.pixelDims.width = 414;
+    device.pixelDims.height = 736;
+    device.diagonalScreenSize = 5.5;
+    device.ppi = 401;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone 8+");
+    device.pixelDims.width = 414;
+    device.pixelDims.height = 736;
+    device.diagonalScreenSize = 5.5;
+    device.ppi = 401;
+    devicesArray[i++] = device;
+        
+    strcpy(device.deviceName, "iPhone X");
+    device.pixelDims.width = 375;
+    device.pixelDims.height = 812;
+    device.diagonalScreenSize = 5.8;
+    device.ppi = 458;
+    devicesArray[i++] = device;
+
     Executables_Path(filePath);
-    
-    // printf("\nargv counun %4d\n", argc);
+
     if (argc > 0) {
         if(strstr(argv[0], filePath) != NULL) {
             userArgsOffset = 1;
         } //end if
-    printf("\n++++++++++\n%s\n--------\n", devicesLookupPointer[0].deviceName);
-         strncpy(validCharsForOfNumber, ".0123456789", 11);
+        strncpy(validCharsForOfNumber, ".0123456789", 11);
         validCharsForOfNumber[11] = '\0';
-         printf("\n++++++++++\n%s\n¬¬¬¬¬¬¬¬¬¬\n", devicesLookupPointer[2].deviceName);
         strncpy(switchParamHelp, "--help", 6);
         unsigned long parseableDimensionSlen;
-        i = 0;
+        i = userArgsOffset;
         while (i < argc) {
             if (strlen(argv[i]) < kUnitNameBufferSize) { // Mininum dimension arg length is 3 i.e. 2mm or 1in etc.
                 i++;
                 continue;
             }
-            printf("looking for params");
             if ( strncmp(argv[i], switchParamHelp, 2) == 0 ) {
                 printf("\nUsage...\nsizemebtns <width> [<height>] [device]\n");
                 printf("<width> .... A dimension of the desired width of a button {\'mm\', \'cm\' or \'in\'}\n");
                 printf("<height> ... [optional] If not supplied assumed to be same as \'width\' {\'mm\', \'cm\' or \'in\'}\n");
                 printf("<device> ... i.e. \'iPhone 4s\' or \'iPhone X\' or a phone family eg \'iPhone 6\'\n");
-                
+                return 0;                
             } else if (strcspn(argv[i], validCharsForOfNumber) == 0) {
                 // Arg starting with a decimal point or number has been found.
                 parseableDimensionSlen = strlen(argv[i]); // Length excluding terminating NULL char.
@@ -130,18 +221,16 @@ int main(int argc, const char * argv[]) {
                 j = 0;
                 
                 while (j < kDevicesArrayLen) {
-                                    if (strcmp(devicesLookupPointer[j].deviceName, argv[i]) == 0) {
-                      printf("\n-------------\n");
-                      printf("%s\n", devicesLookupPointer[j].deviceName);
-                      printf("%d (width)\n", devicesLookupPointer[j].pixelDims.width);
-                      printf("%d (height)\n", devicesLookupPointer[j].pixelDims.height);
-                      printf("%d (ppi)\n", devicesLookupPointer[j].ppi);
-                      printf("\n-------------\n");
-                  }
-                  j++;
+                    if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
+                        printf("\n-------------\n");
+                        printf("%s\n", devicesArray[j].deviceName);
+                        printf("%d (width)\n", devicesArray[j].pixelDims.width);
+                        printf("%d (height)\n", devicesArray[j].pixelDims.height);
+                        printf("%d (ppi)\n", devicesArray[j].ppi);
+                        printf("\n-------------\n");
+                    }
+                    j++;
                 }
-                // devicesStructsArrayLen = sizeof(DeviceDefn);
-
                 char keys[] = "e";
                 unsigned long k;
                 k = strcspn (argv[i],keys);
