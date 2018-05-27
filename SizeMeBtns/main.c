@@ -17,7 +17,7 @@
 #include "calcScreenWidthHeight.h"
 
 int calcCSSPixels(float width, float height, float screenDiagnalSize, int screenPPI);
-struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSize);
+struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
 struct DeviceDefn* getDevices();
 
@@ -64,11 +64,6 @@ int main(int argc, const char * argv[]) {
     
     float fWidth = 0.0;
     float fHeight = 0.0;
-    
-    struct WHDims screenWidthHeight = calcScreenWidthHeight(0.5635, 5.5);
-    // printf("\n........\n%7.4f\n%7.4f\n........\n", screenWidthHeight.height, screenWidthHeight.width );
-
-    
     // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
     // 25.4 (inch). But because chars are treated as signed ints when you
     // cast them to a number type you can't convert the 25.4 to a whole
@@ -222,12 +217,6 @@ int main(int argc, const char * argv[]) {
                 j = kDevicesArrayLen - 1;
                 while (j > -1) {
                     if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
-                        printf("\n-------------\n");
-                        printf("%s\n", devicesArray[j].deviceName);
-                        printf("%d (width)\n", devicesArray[j].pixelDims.width);
-                        printf("%d (height)\n", devicesArray[j].pixelDims.height);
-                        printf("%d (ppi)\n", devicesArray[j].ppi);
-                        printf("\n-------------\n");
                         break;
                     }
                     j--;
@@ -238,13 +227,23 @@ int main(int argc, const char * argv[]) {
             i++;
         } //end while argument array count thru
         
-        if (j < 0) {
-            // @Todo print out sizes for all the devices in the array.
-            
+        i = (j < 0) ? kDevicesArrayLen - 1 : 0;
+        j = (j < 0) ? 0 : j;
+        while (i > -1) {
+            struct DeviceDefn device = devicesArray[j];
+            struct WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.pixelDims.width / device.pixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
+            printf("--------------------------------------------------\n");
+            printf("fWidth = %.2f ",  fWidth);
+            printf("fHeight = %f ", fHeight);
+            printf("\n%s\n", devicesArray[j].deviceName);
+            printf("%d (width)\n", devicesArray[j].pixelDims.width);
+            printf("%d (height)\n", devicesArray[j].pixelDims.height);
+            printf("%d (ppi)\n", devicesArray[j].ppi);
+            printf("%.2f width (mm), %.2f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
+            printf("\n--------------------------------------------------\n");
+            i--;
+            j++;
         }
-        
-        printf("fWidth = %.2f ",  fWidth);
-        printf("fHeight = %f ", fHeight);
         calcCSSPixels(fWidth, fHeight, 5.5, 401);
 
         

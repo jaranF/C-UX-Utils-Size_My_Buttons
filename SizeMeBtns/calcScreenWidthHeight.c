@@ -13,11 +13,12 @@ struct WHDims {
     float height;
 };
 
-struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSize);
+struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM);
 
-struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSize){
-    struct WHDims myDims;
-    myDims.height = 8.0;
-    myDims.width  = 1.0;
-    return myDims;
+struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM){
+    struct WHDims screenDimsInMM;
+    // Math.sqrt((((4 * 2.54) * (4* 2.54)) * (  (568) * (568)   )) / ( ((320) * (320) ) + (568 * 568)   ))
+    screenDimsInMM.height = 8.0;
+    screenDimsInMM.width  = 2.0;
+    return screenDimsInMM;
 }
