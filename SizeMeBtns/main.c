@@ -46,7 +46,6 @@ int main(int argc, const char * argv[]) {
     int i;
     int userArgsOffset;
     char filePath[PATH_MAX + 1];
-    char fileNameOnly[FILENAME_MAX]; // @Todo : rename
     
     char switchParamHelp[7];
     char validCharsForOfNumber[12];
@@ -59,7 +58,6 @@ int main(int argc, const char * argv[]) {
 
     struct DeviceDefn device;
     struct DeviceDefn devicesArray[kDevicesArrayLen];
-    size_t devicesStructLen;
     int j = kDevicesArrayLen - 1;;                              // Used for iteration through devices Struct Array
     
     float fWidth = 0.0;

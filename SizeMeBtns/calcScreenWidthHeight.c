@@ -17,6 +17,7 @@ struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM);
 
 struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM){
     struct WHDims screenDimsInMM;
+    // float heightInMM =
     // Math.sqrt((((4 * 2.54) * (4* 2.54)) * (  (568) * (568)   )) / ( ((320) * (320) ) + (568 * 568)   ))
     screenDimsInMM.height = 8.0;
     screenDimsInMM.width  = 2.0;
