@@ -13,12 +13,18 @@
 #include <string.h>		/* strcpy   */
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
+#include "deviceDefinitions.h"
 #include "calcCSSPixels.h"
 #include "calcScreenWidthHeight.h"
 
 int calcCSSPixels(float width, float height, float screenDiagnalSize, int screenPPI);
 struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSize);
 char* Executables_Path( char* );
+struct DeviceDefn* getDevices();
+
+#define kUnitsLookupLen             3
+#define kUnitNameBufferSize         3
+#define kDevicesArrayLen            13
 
 struct WHDims {
     float width;
@@ -28,17 +34,20 @@ struct WHPixelDims {
     int width;
     int height;
 };
-#define kUnitsLookupLen             3
-#define kUnitNameBufferSize         3
-
+struct DeviceDefn {
+    char deviceName[20];
+    struct WHPixelDims pixelDims;
+    float diagonalScreenSize;
+    int ppi;
+};
 
 
 int main(int argc, const char * argv[]) {
-    int userArgsOffset = 0;
-    char filePath[PATH_MAX + 1];
-    
-    char fileToExamine[1 + PATH_MAX + FILENAME_MAX];
-    char fileNameOnly[FILENAME_MAX];
+    int i;
+    int userArgsOffset;
+    char switchParamHelp[7];
+    char validCharsForOfNumber[12];    char filePath[PATH_MAX + 1];
+    char fileNameOnly[FILENAME_MAX]; // @Todo : rename
 
     float fWidth = 0.0;
     float fHeight = 0.0;
@@ -46,8 +55,10 @@ int main(int argc, const char * argv[]) {
     float unitConversionMultiplier;
     int bWidthFound = 0; // FALSE
     char unit[kUnitNameBufferSize];
+    size_t devicesStructLen;
+    int j;                              // Used for iteration through devices Struct Array
     struct WHDims screenWidthHeight = calcScreenWidthHeight(0.5635, 5.5);
-    printf("\n........\n%7.4f\n%7.4f\n........\n", screenWidthHeight.height, screenWidthHeight.width );
+    // printf("\n........\n%7.4f\n%7.4f\n........\n", screenWidthHeight.height, screenWidthHeight.width );
 
     
     // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
@@ -60,22 +71,25 @@ int main(int argc, const char * argv[]) {
         {{'c',  'm',  '\0'}, 40},
         {{'i',  'n',  '\0'}, 98}
     };
+    struct DeviceDefn* devicesLookupPointer = getDevices();
+    devicesStructLen = sizeof(devicesLookupPointer[0]);
+    printf("devicesStructArray[2] First Struct Item / Struct Len = %zu", devicesStructLen);
+    printf("\n++++++++++\n%s\n__________\n", devicesLookupPointer[2].deviceName);
     //sort_structs_example();
     Executables_Path(filePath);
+    
     // printf("\nargv counun %4d\n", argc);
     if (argc > 0) {
         if(strstr(argv[0], filePath) != NULL) {
             userArgsOffset = 1;
         } //end if
-
-        int i = userArgsOffset;
-        char switchParamHelp[7];
-        char validCharsForOfNumber[12];
-        strcpy(validCharsForOfNumber, ".0123456789");
-        strcpy(switchParamHelp, "--help");
+    printf("\n++++++++++\n%s\n--------\n", devicesLookupPointer[0].deviceName);
+         strncpy(validCharsForOfNumber, ".0123456789", 11);
+        validCharsForOfNumber[11] = '\0';
+         printf("\n++++++++++\n%s\n¬¬¬¬¬¬¬¬¬¬\n", devicesLookupPointer[2].deviceName);
+        strncpy(switchParamHelp, "--help", 6);
         unsigned long parseableDimensionSlen;
-        
-
+        i = 0;
         while (i < argc) {
             if (strlen(argv[i]) < kUnitNameBufferSize) { // Mininum dimension arg length is 3 i.e. 2mm or 1in etc.
                 i++;
@@ -93,6 +107,8 @@ int main(int argc, const char * argv[]) {
                 parseableDimensionSlen = strlen(argv[i]); // Length excluding terminating NULL char.
                 strncpy(unit, (argv[i])+ (parseableDimensionSlen - 2) , 3);
                 int j = 0;
+                
+
                 while (j < kUnitsLookupLen) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
                     if ( strcmp(unit, &(unitsConversionTable[j][0][0])) == 0) {
@@ -111,16 +127,29 @@ int main(int argc, const char * argv[]) {
                     j++;
                 }
             } else {
-                char keys[] = "mci";
+                j = 0;
+                
+                while (j < kDevicesArrayLen) {
+                                    if (strcmp(devicesLookupPointer[j].deviceName, argv[i]) == 0) {
+                      printf("\n-------------\n");
+                      printf("%s\n", devicesLookupPointer[j].deviceName);
+                      printf("%d (width)\n", devicesLookupPointer[j].pixelDims.width);
+                      printf("%d (height)\n", devicesLookupPointer[j].pixelDims.height);
+                      printf("%d (ppi)\n", devicesLookupPointer[j].ppi);
+                      printf("\n-------------\n");
+                  }
+                  j++;
+                }
+                // devicesStructsArrayLen = sizeof(DeviceDefn);
+
+                char keys[] = "e";
                 unsigned long k;
                 k = strcspn (argv[i],keys);
                 printf ("The first number in str is at position %zu.\n",k);
                 
                 strncpy(fileNameOnly, argv[i], k);
                 fileNameOnly[k] = '\0';
-                int width = atoi(fileNameOnly);
                 printf("fileNameOnly = %s\n", fileNameOnly);
-                printf("\nwidth = %d\n", width + 1);
             }
             printf("arg[%d] = \'%s\'\n", i, argv[i]);
             i++;
@@ -128,8 +157,6 @@ int main(int argc, const char * argv[]) {
         printf("fWidth = %.2f ",  fWidth);
         printf("fHeight = %f ", fHeight);
         calcCSSPixels(fWidth, fHeight, 5.5, 401);
-        strcpy(fileToExamine, filePath); // printf("fileToExamine = %s\n", fileToExamine);
-        strcat(fileToExamine, fileNameOnly); // printf("fileToExamine = %s\n", fileToExamine);
 
         
         

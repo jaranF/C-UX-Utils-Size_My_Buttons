@@ -71,7 +71,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "iPhone"
+            argument = "iPhone\ 8"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

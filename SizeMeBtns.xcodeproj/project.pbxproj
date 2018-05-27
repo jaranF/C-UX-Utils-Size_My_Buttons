@@ -11,6 +11,7 @@
 		978D88BE20A9185F00B1D58A /* Executables_Path.c in Sources */ = {isa = PBXBuildFile; fileRef = 978D88BD20A9185F00B1D58A /* Executables_Path.c */; };
 		978D88C120B25E6C00B1D58A /* calcCSSPixels.c in Sources */ = {isa = PBXBuildFile; fileRef = 978D88BF20B25E6C00B1D58A /* calcCSSPixels.c */; };
 		97A443F320B653DF001B8C18 /* calcScreenWidthHeight.c in Sources */ = {isa = PBXBuildFile; fileRef = 97A443F120B653DF001B8C18 /* calcScreenWidthHeight.c */; };
+		97A443F920B657D1001B8C18 /* deviceDefinitions.c in Sources */ = {isa = PBXBuildFile; fileRef = 97A443F720B657D1001B8C18 /* deviceDefinitions.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,8 @@
 		978D88C020B25E6C00B1D58A /* calcCSSPixels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcCSSPixels.h; sourceTree = "<group>"; };
 		97A443F120B653DF001B8C18 /* calcScreenWidthHeight.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = calcScreenWidthHeight.c; sourceTree = "<group>"; };
 		97A443F220B653DF001B8C18 /* calcScreenWidthHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcScreenWidthHeight.h; sourceTree = "<group>"; };
+		97A443F720B657D1001B8C18 /* deviceDefinitions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deviceDefinitions.c; sourceTree = "<group>"; };
+		97A443F820B657D1001B8C18 /* deviceDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deviceDefinitions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 			children = (
 				978D88B520A915A500B1D58A /* main.c */,
 				97A443F120B653DF001B8C18 /* calcScreenWidthHeight.c */,
+				97A443F720B657D1001B8C18 /* deviceDefinitions.c */,
+				97A443F820B657D1001B8C18 /* deviceDefinitions.h */,
 				97A443F220B653DF001B8C18 /* calcScreenWidthHeight.h */,
 				978D88BF20B25E6C00B1D58A /* calcCSSPixels.c */,
 				978D88C020B25E6C00B1D58A /* calcCSSPixels.h */,
@@ -140,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97A443F320B653DF001B8C18 /* calcScreenWidthHeight.c in Sources */,
+				97A443F920B657D1001B8C18 /* deviceDefinitions.c in Sources */,
 				978D88BE20A9185F00B1D58A /* Executables_Path.c in Sources */,
 				978D88C120B25E6C00B1D58A /* calcCSSPixels.c in Sources */,
 				978D88B620A915A500B1D58A /* main.c in Sources */,
