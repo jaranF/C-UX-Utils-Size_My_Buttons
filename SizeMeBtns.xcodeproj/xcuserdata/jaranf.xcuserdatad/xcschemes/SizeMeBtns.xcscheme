@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "iPhone\ 6"
+            argument = "iPhone\ 5"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

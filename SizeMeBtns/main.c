@@ -24,6 +24,7 @@ struct DeviceDefn* getDevices();
 #define kUnitsLookupLen             3
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
+#define kInchesToMMmultiplier       25.4
 
 struct WHDims {
     float width;
@@ -59,7 +60,7 @@ int main(int argc, const char * argv[]) {
     struct DeviceDefn device;
     struct DeviceDefn devicesArray[kDevicesArrayLen];
     size_t devicesStructLen;
-    int j;                              // Used for iteration through devices Struct Array
+    int j = kDevicesArrayLen - 1;;                              // Used for iteration through devices Struct Array
     
     float fWidth = 0.0;
     float fHeight = 0.0;
@@ -77,7 +78,7 @@ int main(int argc, const char * argv[]) {
     char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
         {{'m',  'm',  '\0'}, 5},
         {{'c',  'm',  '\0'}, 5},
-        {{'i',  'n',  '\0'}, 127}
+        {{'i',  'n',  '\0'}, kInchesToMMmultiplier * 5}
     };
     i = 0;
     strcpy(device.deviceName, "iPhone 5");
@@ -218,8 +219,8 @@ int main(int argc, const char * argv[]) {
                     j++;
                 }
             } else {
-                j = 0;
-                while (j < kDevicesArrayLen) {
+                j = kDevicesArrayLen - 1;
+                while (j > -1) {
                     if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
                         printf("\n-------------\n");
                         printf("%s\n", devicesArray[j].deviceName);
@@ -227,13 +228,21 @@ int main(int argc, const char * argv[]) {
                         printf("%d (height)\n", devicesArray[j].pixelDims.height);
                         printf("%d (ppi)\n", devicesArray[j].ppi);
                         printf("\n-------------\n");
+                        break;
                     }
-                    j++;
+                    j--;
                 }
+                printf("\nj counter value = %d \n", j);
             }
-            printf("arg[%d] = \'%s\'\n", i, argv[i]);
+
             i++;
-        } //end while
+        } //end while argument array count thru
+        
+        if (j < 0) {
+            // @Todo print out sizes for all the devices in the array.
+            
+        }
+        
         printf("fWidth = %.2f ",  fWidth);
         printf("fHeight = %f ", fHeight);
         calcCSSPixels(fWidth, fHeight, 5.5, 401);
