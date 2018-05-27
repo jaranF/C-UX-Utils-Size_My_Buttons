@@ -72,12 +72,12 @@ int main(int argc, const char * argv[]) {
     // 25.4 (inch). But because chars are treated as signed ints when you
     // cast them to a number type you can't convert the 25.4 to a whole
     // number using the most staightforward option which is to multiply
-    // by 10. Instead I used a lower multiplie, i.e. 4, to keep the
-    // numbers below 127.
+    // by 10. Instead I used a lower multiplie, i.e. 5, to keep the
+    // numbers below 128.
     char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
-        {{'m',  'm',  '\0'}, 4},
-        {{'c',  'm',  '\0'}, 40},
-        {{'i',  'n',  '\0'}, 98}
+        {{'m',  'm',  '\0'}, 5},
+        {{'c',  'm',  '\0'}, 5},
+        {{'i',  'n',  '\0'}, 127}
     };
     i = 0;
     strcpy(device.deviceName, "iPhone 5");
@@ -192,7 +192,7 @@ int main(int argc, const char * argv[]) {
                 printf("<width> .... A dimension of the desired width of a button {\'mm\', \'cm\' or \'in\'}\n");
                 printf("<height> ... [optional] If not supplied assumed to be same as \'width\' {\'mm\', \'cm\' or \'in\'}\n");
                 printf("<device> ... i.e. \'iPhone 4s\' or \'iPhone X\' or a phone family eg \'iPhone 6\'\n");
-                return 0;                
+                return 0;
             } else if (strcspn(argv[i], validCharsForOfNumber) == 0) {
                 // Arg starting with a decimal point or number has been found.
                 parseableDimensionSlen = strlen(argv[i]); // Length excluding terminating NULL char.
@@ -206,7 +206,7 @@ int main(int argc, const char * argv[]) {
                         printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
                         unitConversionMultiplier = (float)(unitsConversionTable[j][1][0]);
-                        dimensionNumber *= unitConversionMultiplier / 4;
+                        dimensionNumber *= unitConversionMultiplier / 5;
                         if (bWidthFound == 0) {
                             bWidthFound = 1;
                             fWidth = dimensionNumber;
@@ -219,7 +219,6 @@ int main(int argc, const char * argv[]) {
                 }
             } else {
                 j = 0;
-                
                 while (j < kDevicesArrayLen) {
                     if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
                         printf("\n-------------\n");
@@ -231,14 +230,6 @@ int main(int argc, const char * argv[]) {
                     }
                     j++;
                 }
-                char keys[] = "e";
-                unsigned long k;
-                k = strcspn (argv[i],keys);
-                printf ("The first number in str is at position %zu.\n",k);
-                
-                strncpy(fileNameOnly, argv[i], k);
-                fileNameOnly[k] = '\0';
-                printf("fileNameOnly = %s\n", fileNameOnly);
             }
             printf("arg[%d] = \'%s\'\n", i, argv[i]);
             i++;

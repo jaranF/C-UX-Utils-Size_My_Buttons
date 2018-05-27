@@ -67,7 +67,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "1in"
+            argument = "0.74803149606299in"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
