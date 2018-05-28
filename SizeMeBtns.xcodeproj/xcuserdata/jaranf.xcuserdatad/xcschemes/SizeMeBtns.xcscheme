@@ -63,15 +63,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "iPhone\ none"
+            argument = "iPhone\ 6"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "0.74803149606299in"
+            argument = "29.2525805mm"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "30mm"
+            argument = "52.03059mm"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -16,11 +16,6 @@
 #include "calcCSSPixels.h"
 #include "calcScreenWidthHeight.h"
 
-int calcCSSPixels(float width, float height, float screenDiagnalSize, int screenPPI);
-struct WHDims calcScreenWidthHeight(float ratio, float screenDiagnalSizeInMM);
-char* Executables_Path( char* );
-struct DeviceDefn* getDevices();
-
 #define kUnitsLookupLen             3
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
@@ -36,12 +31,16 @@ struct WHPixelDims {
 };
 struct DeviceDefn {
     char deviceName[15];
-    struct WHPixelDims pixelDims;
+    struct WHPixelDims CSSPixelDims;
+    struct WHPixelDims PhysicalPixelDims;
     float diagonalScreenSize;
     int ppi;
 };
 
-
+struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
+struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
+char* Executables_Path( char* );
+struct DeviceDefn* getDevices();
 int main(int argc, const char * argv[]) {
     int i;
     int userArgsOffset;
@@ -75,92 +74,118 @@ int main(int argc, const char * argv[]) {
     };
     i = 0;
     strcpy(device.deviceName, "iPhone 5");
-    device.pixelDims.width = 320;
-    device.pixelDims.height = 568;
+    device.CSSPixelDims.width = 320;
+    device.CSSPixelDims.height = 568;
+    device.PhysicalPixelDims.width = 640;
+    device.PhysicalPixelDims.height = 1136;
     device.diagonalScreenSize = 4;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 5s");
-    device.pixelDims.width = 320;
-    device.pixelDims.height = 568;
+    device.CSSPixelDims.width = 320;
+    device.CSSPixelDims.height = 568;
+    device.PhysicalPixelDims.width = 640;
+    device.PhysicalPixelDims.height = 1136;
     device.diagonalScreenSize = 4;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 5c");
-    device.pixelDims.width = 320;
-    device.pixelDims.height = 568;
+    device.CSSPixelDims.width = 320;
+    device.CSSPixelDims.height = 568;
+    device.PhysicalPixelDims.width = 640;
+    device.PhysicalPixelDims.height = 1136;
     device.diagonalScreenSize = 4;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 5SE");
-    device.pixelDims.width = 320;
-    device.pixelDims.height = 568;
+    device.CSSPixelDims.width = 320;
+    device.CSSPixelDims.height = 568;
+    device.PhysicalPixelDims.width = 640;
+    device.PhysicalPixelDims.height = 1136;
     device.diagonalScreenSize = 4;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 6");
-    device.pixelDims.width = 375;
-    device.pixelDims.height = 667;
+    device.CSSPixelDims.width = 375;
+    device.CSSPixelDims.height = 667;
+    device.PhysicalPixelDims.width = 750;
+    device.PhysicalPixelDims.height = 1344;
     device.diagonalScreenSize = 4.7;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 6s");
-    device.pixelDims.width = 375;
-    device.pixelDims.height = 667;
+    device.CSSPixelDims.width = 375;
+    device.CSSPixelDims.height = 667;
+    device.PhysicalPixelDims.width = 750;
+    device.PhysicalPixelDims.height = 1344;
     device.diagonalScreenSize = 4.7;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 7");
-    device.pixelDims.width = 375;
-    device.pixelDims.height = 667;
+    device.CSSPixelDims.width = 375;
+    device.CSSPixelDims.height = 667;
+    device.PhysicalPixelDims.width = 750;
+    device.PhysicalPixelDims.height = 1344;
     device.diagonalScreenSize = 4.7;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 8");
-    device.pixelDims.width = 375;
-    device.pixelDims.height = 667;
+    device.CSSPixelDims.width = 375;
+    device.CSSPixelDims.height = 667;
+    device.PhysicalPixelDims.width = 750;
+    device.PhysicalPixelDims.height = 1344;
     device.diagonalScreenSize = 4.7;
     device.ppi = 326;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 6+");
-    device.pixelDims.width = 414;
-    device.pixelDims.height = 736;
+    device.CSSPixelDims.width = 414;
+    device.CSSPixelDims.height = 736;
+    device.PhysicalPixelDims.width = 1080;
+    device.PhysicalPixelDims.height = 1920;
     device.diagonalScreenSize = 5.51;
     device.ppi = 401;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 6s+");
-    device.pixelDims.width = 414;
-    device.pixelDims.height = 736;
+    device.CSSPixelDims.width = 414;
+    device.CSSPixelDims.height = 736;
+    device.PhysicalPixelDims.width = 1080;
+    device.PhysicalPixelDims.height = 1920;
     device.diagonalScreenSize = 5.5;
     device.ppi = 401;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 7+");
-    device.pixelDims.width = 414;
-    device.pixelDims.height = 736;
+    device.CSSPixelDims.width = 414;
+    device.CSSPixelDims.height = 736;
+    device.PhysicalPixelDims.width = 1080;
+    device.PhysicalPixelDims.height = 1920;
     device.diagonalScreenSize = 5.5;
     device.ppi = 401;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone 8+");
-    device.pixelDims.width = 414;
-    device.pixelDims.height = 736;
+    device.CSSPixelDims.width = 414;
+    device.CSSPixelDims.height = 736;
+    device.PhysicalPixelDims.width = 1080;
+    device.PhysicalPixelDims.height = 1920;
     device.diagonalScreenSize = 5.5;
     device.ppi = 401;
     devicesArray[i++] = device;
         
     strcpy(device.deviceName, "iPhone X");
-    device.pixelDims.width = 375;
-    device.pixelDims.height = 812;
+    device.CSSPixelDims.width = 375;
+    device.CSSPixelDims.height = 812;
+    device.PhysicalPixelDims.width = 1125;
+    device.PhysicalPixelDims.height = 2436;
     device.diagonalScreenSize = 5.8;
     device.ppi = 458;
     devicesArray[i++] = device;
@@ -229,20 +254,22 @@ int main(int argc, const char * argv[]) {
         j = (j < 0) ? 0 : j;
         while (i > -1) {
             struct DeviceDefn device = devicesArray[j];
-            struct WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.pixelDims.width / device.pixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
+            struct WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.CSSPixelDims.width, device.CSSPixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
             printf("--------------------------------------------------\n");
             printf("fWidth = %.2f ",  fWidth);
             printf("fHeight = %f ", fHeight);
-            printf("\n%s\n", devicesArray[j].deviceName);
-            printf("%d (width)\n", devicesArray[j].pixelDims.width);
-            printf("%d (height)\n", devicesArray[j].pixelDims.height);
-            printf("%d (ppi)\n", devicesArray[j].ppi);
-            printf("%.2f width (mm), %.2f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
+            printf("\n%s\n", device.deviceName);
+            printf("%d (width)\n", device.CSSPixelDims.width);
+            printf("%d (height)\n", device.CSSPixelDims.height);
+            printf("%d (ppi)\n", device.ppi);
+            printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
+            struct WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, device.CSSPixelDims, device.PhysicalPixelDims, device.ppi);
+            printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)", CSSPixelDims.width, CSSPixelDims.height );
             printf("\n--------------------------------------------------\n");
             i--;
             j++;
         }
-        calcCSSPixels(fWidth, fHeight, 5.5, 401);
+        
 
         
         
