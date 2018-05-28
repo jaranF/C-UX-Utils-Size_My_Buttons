@@ -40,7 +40,7 @@ struct DeviceDefn {
 struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
 struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
-struct DeviceDefn* getDevices();
+
 int main(int argc, const char * argv[]) {
     int i;
     int userArgsOffset;
@@ -48,7 +48,6 @@ int main(int argc, const char * argv[]) {
     
     char switchParamHelp[7];
     char validCharsForOfNumber[12];
-
 
     float dimensionNumber;
     int bWidthFound = 0; // FALSE
@@ -62,14 +61,14 @@ int main(int argc, const char * argv[]) {
     float fWidth = 0.0;
     float fHeight = 0.0;
     // The conversion multiplies to get mm are 10mm (i.e. 10mm to 1cm) and
-    // 25.4 (inch). But because chars are treated as signed ints when you
+    // 25.4 (inch). But because chars are treated as signed bytes when you
     // cast them to a number type you can't convert the 25.4 to a whole
     // number using the most staightforward option which is to multiply
     // by 10. Instead I used a lower multiplie, i.e. 5, to keep the
-    // numbers below 128.
+    // numbers below 128 but still have the converted to whole integers.
     char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
         {{'m',  'm',  '\0'}, 5},
-        {{'c',  'm',  '\0'}, 5},
+        {{'c',  'm',  '\0'}, 50},
         {{'i',  'n',  '\0'}, kInchesToMMmultiplier * 5}
     };
     i = 0;
@@ -225,7 +224,7 @@ int main(int argc, const char * argv[]) {
                         printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
                         unitConversionMultiplier = (float)(unitsConversionTable[j][1][0]);
-                        dimensionNumber *= unitConversionMultiplier / 5;
+                        dimensionNumber *= unitConversionMultiplier / 5;    // Do the conversion so dimension is now in millimeters.
                         if (bWidthFound == 0) {
                             bWidthFound = 1;
                             fWidth = dimensionNumber;
