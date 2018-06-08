@@ -67,9 +67,9 @@ int main(int argc, const char * argv[]) {
     // by 10. Instead I used a lower multiplie, i.e. 5, to keep the
     // numbers below 128 but still have the converted to whole integers.
     char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
-        {{'m',  'm',  '\0'}, 5},
-        {{'c',  'm',  '\0'}, 50},
-        {{'i',  'n',  '\0'}, kInchesToMMmultiplier * 5}
+        {{"mm"}, 5},
+        {{"cm"}, 50},
+        {{"in"}, kInchesToMMmultiplier * 5}
     };
     i = 0;
     strcpy(device.deviceName, "iPhone 5");
