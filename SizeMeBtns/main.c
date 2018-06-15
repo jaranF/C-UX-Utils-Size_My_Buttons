@@ -3,7 +3,6 @@
 //  SizeMeBtns
 //
 //  Created by Jaran F on 14/05/2018.
-//  Copyright © 2018 JaranF Information Technology. All rights reserved.
 //
 
 #include <stdio.h>
@@ -15,27 +14,7 @@
 #include <mach-o/dyld.h>/* bool */
 #include "calcCSSPixels.h"
 #include "calcScreenWidthHeight.h"
-
-#define kUnitsLookupLen             3
-#define kUnitNameBufferSize         3
-#define kDevicesArrayLen            13
-#define kInchesToMMmultiplier       25.4
-
-struct WHDims {
-    float width;
-    float height;
-};
-struct WHPixelDims {
-    int width;
-    int height;
-};
-struct DeviceDefn {
-    char deviceName[15];
-    struct WHPixelDims CSSPixelDims;
-    struct WHPixelDims PhysicalPixelDims;
-    float diagonalScreenSize;
-    int ppi;
-};
+#include "common.h"
 
 struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
 struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);

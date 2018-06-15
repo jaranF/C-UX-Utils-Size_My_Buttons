@@ -3,15 +3,11 @@
 //  SizeMeBtns
 //
 //  Created by Jaran F on 24/05/2018.
-//  Copyright © 2018 JaranF Information Technology. All rights reserved.
 //
 #include <math.h>
 #include "calcScreenWidthHeight.h"
+#include "common.h"
 
-struct WHDims {
-    float width;
-    float height;
-};
 
 struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 

@@ -3,21 +3,11 @@
 //  SizeMeBtns
 //
 //  Created by Jaran F on 21/05/2018.
-//  Copyright © 2018 JaranF Information Technology. All rights reserved.
 //
 #include <math.h>
 #include "calcCSSPixels.h"
+#include "common.h"
 
-#define kInchesToMMmultiplier       25.4
-
-struct WHDims {
-    float width;
-    float height;
-};
-struct WHPixelDims {
-    int width;
-    int height;
-};
 
 struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
 

@@ -36,6 +36,7 @@
 		97A443F220B653DF001B8C18 /* calcScreenWidthHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcScreenWidthHeight.h; sourceTree = "<group>"; };
 		97A443F720B657D1001B8C18 /* deviceDefinitions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deviceDefinitions.c; sourceTree = "<group>"; };
 		97A443F820B657D1001B8C18 /* deviceDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deviceDefinitions.h; sourceTree = "<group>"; };
+		97DCCE2120CA911E00605355 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +77,7 @@
 				97A443F220B653DF001B8C18 /* calcScreenWidthHeight.h */,
 				978D88BF20B25E6C00B1D58A /* calcCSSPixels.c */,
 				978D88C020B25E6C00B1D58A /* calcCSSPixels.h */,
+				97DCCE2120CA911E00605355 /* common.h */,
 			);
 			path = SizeMeBtns;
 			sourceTree = "<group>";
