@@ -200,7 +200,7 @@ int main(int argc, const char * argv[]) {
                 while (j < kUnitsLookupLen) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
                     if ( strcmp(unit, &(unitsConversionTable[j][0][0])) == 0) {
-                        printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
+                        // printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
                         unitConversionMultiplier = (float)(unitsConversionTable[j][1][0]);
                         dimensionNumber *= unitConversionMultiplier / 5;    // Do the conversion so dimension is now in millimeters.
@@ -222,9 +222,8 @@ int main(int argc, const char * argv[]) {
                     }
                     j--;
                 }
-                printf("\nj counter value = %d \n", j);
             }
-
+	
             i++;
         } //end while argument array count thru
         
@@ -233,17 +232,17 @@ int main(int argc, const char * argv[]) {
         while (i > -1) {
             struct DeviceDefn device = devicesArray[j];
             struct WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.CSSPixelDims.width, device.CSSPixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
-            printf("--------------------------------------------------\n");
-            printf("fWidth = %.2f ",  fWidth);
-            printf("fHeight = %f ", fHeight);
-            printf("\n%s\n", device.deviceName);
-            printf("%d (width)\n", device.CSSPixelDims.width);
-            printf("%d (height)\n", device.CSSPixelDims.height);
-            printf("%d (ppi)\n", device.ppi);
-            printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
+            // printf("--------------------------------------------------\n");
+            //  printf("fWidth = %.2f ",  fWidth);
+            // printf("fHeight = %f ", fHeight);
+            // printf("\n%s\n", device.deviceName);
+            // printf("%d (width)\n", device.CSSPixelDims.width);
+            // printf("%d (height)\n", device.CSSPixelDims.height);
+            // printf("%d (ppi)\n", device.ppi);
+            // printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
             struct WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, device.CSSPixelDims, device.PhysicalPixelDims, device.ppi);
             printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)", CSSPixelDims.width, CSSPixelDims.height );
-            printf("\n--------------------------------------------------\n");
+            // printf("\n--------------------------------------------------\n");
             i--;
             j++;
         }
