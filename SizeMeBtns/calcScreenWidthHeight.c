@@ -13,7 +13,9 @@ struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float
 
 struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM){
     struct WHDims screenDimsInMM;
-    float heightInMM = sqrt(((screenDiagnalSizeInMM * screenDiagnalSizeInMM) * (heightInPixels * heightInPixels)) / ( (widthInPixels * widthInPixels) + (heightInPixels * heightInPixels)   ));
+    int heightSquared = heightInPixels * heightInPixels;
+    int widthSquared = widthInPixels * widthInPixels;
+    float heightInMM = sqrt(((screenDiagnalSizeInMM * screenDiagnalSizeInMM) * heightSquared) / (widthSquared + heightSquared));
     // Math.sqrt((((4 * 2.54) * (4* 2.54)) * (  (568) * (568)   )) / ( ((320) * (320) ) + (568 * 568)   ))
     screenDimsInMM.height = heightInMM;
     screenDimsInMM.width  = heightInMM * (float)widthInPixels / (float)heightInPixels;
