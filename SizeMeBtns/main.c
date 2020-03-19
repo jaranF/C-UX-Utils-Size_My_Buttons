@@ -25,8 +25,8 @@ int main(int argc, const char * argv[]) {
     int userArgsOffset;
     char filePath[PATH_MAX + 1];
     
-    char switchParamHelp[7];
-    char validCharsForOfNumber[12];
+    char switchParamHelp[7] = "--help\0";
+    char validCharsForOfNumber[12] = ".0123456789\0";
 
     float dimensionNumber;
     int bWidthFound = 0; // FALSE
@@ -35,7 +35,7 @@ int main(int argc, const char * argv[]) {
 
     struct DeviceDefn device;
     struct DeviceDefn devicesArray[kDevicesArrayLen];
-    int j = kDevicesArrayLen - 1;;                              // Used for iteration through devices Struct Array
+    int j = sizeof(devicesArray) / sizeof(device) - 1;;                              // Used for iteration through devices Struct Array
     
     float fWidth = 0.0;
     float fHeight = 0.0;
@@ -174,9 +174,6 @@ int main(int argc, const char * argv[]) {
         if(strstr(argv[0], filePath) != NULL) {
             userArgsOffset = 1;
         } //end if
-        strncpy(validCharsForOfNumber, ".0123456789", 11);
-        validCharsForOfNumber[11] = '\0';
-        strncpy(switchParamHelp, "--help", 6);
         unsigned long parseableDimensionSlen;
         i = userArgsOffset;
         while (i < argc) {
