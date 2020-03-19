@@ -8,7 +8,7 @@
 #ifndef common_h
 #define common_h
 
-#define kUnitsLookupLen             3
+#define kNumOfDifferentUnits        3
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
 #define kInchesToMMmultiplier       25.4

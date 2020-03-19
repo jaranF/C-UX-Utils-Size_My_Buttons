@@ -16,6 +16,14 @@
 #include "calcScreenWidthHeight.h"
 #include "common.h"
 
+// I M P R O V E M E N T S    L I S T
+// ==================================
+// 0\ Change use of #define macro labels to clearer names.
+// 1\ Use typedefs.
+// 2\ Persist the DevicesDefinitions data to a file that is read in as a linked list.
+// 3\ Use union instead of two separate largely similar structs 'struct WHDims' and 'struct WHPixelDims'.
+// 4\ Separate out into separate files.
+
 struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
 struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
@@ -45,7 +53,7 @@ int main(int argc, const char * argv[]) {
     // number using the most staightforward option which is to multiply
     // by 10. Instead I used a lower multiplie, i.e. 5, to keep the
     // numbers below 128 but still have the converted to whole integers.
-    char unitsConversionTable[kUnitsLookupLen][2][kUnitNameBufferSize] = {
+    char unitsConversionTable[kNumOfDifferentUnits][2][kUnitNameBufferSize] = {
         {{"mm"}, 5},
         {{"cm"}, 50},
         {{"in"}, kInchesToMMmultiplier * 5}
@@ -194,7 +202,7 @@ int main(int argc, const char * argv[]) {
                 int j = 0;
                 
 
-                while (j < kUnitsLookupLen) {
+                while (j < kNumOfDifferentUnits) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
                     if ( strcmp(unit, &(unitsConversionTable[j][0][0])) == 0) {
                         // printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
