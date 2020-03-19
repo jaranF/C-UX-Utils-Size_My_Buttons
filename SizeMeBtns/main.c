@@ -24,8 +24,8 @@
 // 3\ Use union instead of two separate largely similar structs 'struct WHDims' and 'struct WHPixelDims'.
 // 4\ Separate out into separate files.
 
-struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
-struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
+WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
+WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
 
 int main(int argc, const char * argv[]) {
@@ -41,8 +41,8 @@ int main(int argc, const char * argv[]) {
     float unitConversionMultiplier;
     char unit[kUnitNameBufferSize];
 
-    struct DeviceDefn device;
-    struct DeviceDefn devicesArray[kDevicesArrayLen];
+    DeviceDefn device;
+    DeviceDefn devicesArray[kDevicesArrayLen];
     int j = sizeof(devicesArray) / sizeof(device) - 1;;                              // Used for iteration through devices Struct Array
     
     float fWidth = 0.0;
@@ -235,8 +235,8 @@ int main(int argc, const char * argv[]) {
         i = (j < 0) ? kDevicesArrayLen - 1 : 0;
         j = (j < 0) ? 0 : j;
         while (i > -1) {
-            struct DeviceDefn device = devicesArray[j];
-            struct WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.CSSPixelDims.width, device.CSSPixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
+            DeviceDefn device = devicesArray[j];
+            WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.CSSPixelDims.width, device.CSSPixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
             // printf("--------------------------------------------------\n");
             //  printf("fWidth = %.2f ",  fWidth);
             // printf("fHeight = %f ", fHeight);
@@ -245,7 +245,7 @@ int main(int argc, const char * argv[]) {
             // printf("%d (height)\n", device.CSSPixelDims.height);
             // printf("%d (ppi)\n", device.ppi);
             // printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
-            struct WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, device.CSSPixelDims, device.PhysicalPixelDims, device.ppi);
+            WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, device.CSSPixelDims, device.PhysicalPixelDims, device.ppi);
             printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)", CSSPixelDims.width, CSSPixelDims.height );
             // printf("\n--------------------------------------------------\n");
             i--;

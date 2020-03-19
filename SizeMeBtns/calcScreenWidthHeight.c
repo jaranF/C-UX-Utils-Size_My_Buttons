@@ -9,10 +9,10 @@
 #include "common.h"
 
 
-struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
+WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 
-struct WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM){
-    struct WHDims screenDimsInMM;
+WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM){
+    WHDims screenDimsInMM;
     int heightSquared = heightInPixels * heightInPixels;
     int widthSquared = widthInPixels * widthInPixels;
     float heightInMM = sqrt(((screenDiagnalSizeInMM * screenDiagnalSizeInMM) * heightSquared) / (widthSquared + heightSquared));

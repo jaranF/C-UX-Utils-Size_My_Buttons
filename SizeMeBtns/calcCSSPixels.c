@@ -9,10 +9,10 @@
 #include "common.h"
 
 
-struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI);
+WHPixelDims calcCSSPixels(float width, float height, WHDims  screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
 
-struct WHPixelDims calcCSSPixels(float width, float height, struct WHDims screenWidthHeightInMM, struct WHPixelDims CSSPixelDims, struct WHPixelDims PhysicalPixelDims, int screenPPI) {
-    struct WHPixelDims calculatedCSSPixelDims;
+WHPixelDims calcCSSPixels(float width, float height, WHDims  screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI) {
+    WHPixelDims calculatedCSSPixelDims;
     float screenPPMM = (screenPPI / kInchesToMMmultiplier);
     calculatedCSSPixelDims.width = (width * screenPPMM) / (PhysicalPixelDims.width / CSSPixelDims.width);
     calculatedCSSPixelDims.height = (height * screenPPMM) / (PhysicalPixelDims.height / CSSPixelDims.height);

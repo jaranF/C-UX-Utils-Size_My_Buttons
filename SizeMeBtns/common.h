@@ -13,19 +13,19 @@
 #define kDevicesArrayLen            13
 #define kInchesToMMmultiplier       25.4
 
-struct WHDims {
+typedef struct WHDimsTag {
     float width;
     float height;
-};
-struct WHPixelDims {
+} WHDims;
+typedef struct WHPixelDimsTag {
     int width;
     int height;
-};
-struct DeviceDefn {
+} WHPixelDims;
+typedef struct DeviceDefnTag {
     char deviceName[15];
-    struct WHPixelDims CSSPixelDims;
-    struct WHPixelDims PhysicalPixelDims;
+    WHPixelDims CSSPixelDims;
+    WHPixelDims PhysicalPixelDims;
     float diagonalScreenSize;
     int ppi;
-};
+} DeviceDefn;
 #endif /* common_h */
