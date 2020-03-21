@@ -12,7 +12,10 @@
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
 #define kInchesToMMmultiplier       25.4
-
+#define kDevicesDefnFileName        "./definitionData.txt"
+#define kScanToNewlinePattern       "%[^\n]\n"
+#define kOK                         1
+#define SIZEOFDELIMITEDSTRUCT( A ) sizeof(A.deviceName) + 1 + sizeof(A.CSSPixelDims) + 1 + sizeof(A.PhysicalPixelDims) + 1 + sizeof(A.diagonalScreenSize) + 1 + sizeof(A.ppi)
 typedef struct WHDimsTag {
     float width;
     float height;
@@ -22,10 +25,12 @@ typedef struct WHPixelDimsTag {
     int height;
 } WHPixelDims;
 typedef struct DeviceDefnTag {
-    char deviceName[15];
+    char deviceName[16];
     WHPixelDims CSSPixelDims;
     WHPixelDims PhysicalPixelDims;
     float diagonalScreenSize;
     int ppi;
+    struct DeviceDefnTag* nextItemPtr;
 } DeviceDefn;
+
 #endif /* common_h */

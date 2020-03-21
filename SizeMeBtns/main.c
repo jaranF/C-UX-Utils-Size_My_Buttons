@@ -16,7 +16,9 @@
 #include "calcScreenWidthHeight.h"
 #include "common.h"
 
-// I M P R O V E M E N T S    L I S T
+
+
+//  I M P R O V E M E N T S    L I S T
 // ==================================
 // 0\ Change use of #define macro labels to clearer names.
 // 1\ Use typedefs.
@@ -27,6 +29,9 @@
 WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
 WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
+int readInToDefinitionList( void );
+void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line);
+void freeList( DeviceDefn * );
 
 int main(int argc, const char * argv[]) {
     int i;
@@ -231,7 +236,7 @@ int main(int argc, const char * argv[]) {
 	
             i++;
         } //end while argument array count thru
-        
+        readInToDefinitionList();
         i = (j < 0) ? kDevicesArrayLen - 1 : 0;
         j = (j < 0) ? 0 : j;
         while (i > -1) {
@@ -258,4 +263,77 @@ int main(int argc, const char * argv[]) {
     } //end if argc > 0 (args length greater than zero
     printf("\nfinished\n");
     return 0;
+}
+
+int readInToDefinitionList() {
+    int retValue = 0;
+    FILE *fp;
+    char filePath[PATH_MAX + 1];
+    Executables_Path(filePath);
+    fp = fopen(kDevicesDefnFileName, "r" );
+    if ( NULL == fp ) {
+        printf("Error opening file \'%s\'\n", kDevicesDefnFileName);
+        printf("In file path...\n");
+        printf("%s\n", filePath);
+        retValue = -1;
+        DeviceDefn dummyDefn;
+        printf("\n-----\n");
+        printf("sizeof struct = %zu\n", SIZEOFDELIMITEDSTRUCT( dummyDefn ) +1);
+
+    } else {
+        DeviceDefn *deviceDefnPtrLinkedList = NULL, *currentItemPtr = NULL, *prevItemPtr;
+        int scanfResult;
+        DeviceDefn dummyDefn;
+        printf("\n-----\n");
+        printf("sizeof ppi = %zu",sizeof(dummyDefn.ppi));
+        char allFieldsLineBuff[SIZEOFDELIMITEDSTRUCT( dummyDefn ) + 1]; // +1 for pipi separator between struct's field and +1 to that for trailing NULL char/
+        prevItemPtr = NULL;
+        //
+        while (kOK == (scanfResult = fscanf(fp, kScanToNewlinePattern, allFieldsLineBuff))) {
+            currentItemPtr = malloc(sizeof(DeviceDefn));
+            if (prevItemPtr != NULL) {
+                prevItemPtr->nextItemPtr = currentItemPtr;
+            } else {
+                deviceDefnPtrLinkedList = currentItemPtr;
+            }
+            parsePipeDelimited(currentItemPtr, allFieldsLineBuff);
+            prevItemPtr = currentItemPtr;
+        }
+        currentItemPtr->nextItemPtr = NULL;
+        if (scanfResult != EOF) fprintf( stderr,"invalid data format");
+        /*         fprintf( stderr, "Invalid data near offset %lu, %d: %s\n",
+         (long unsigned int)ftello(fp), scanResult, strerror(scanResult) );
+         */
+        fclose(fp);
+        freeList(deviceDefnPtrLinkedList);
+    }
+    return retValue;
+}
+
+void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
+{
+    char *pch, *base;
+    DeviceDefn dummyDefn;
+    base = (char*)destinationStructPtr;
+    int i = 0;
+    pch = strtok (line,",");
+    while (pch != NULL)
+    {
+        //strcpy(destinationStructPtr->field1, pch);
+        strcpy((base + (i++ * SIZEOFDELIMITEDSTRUCT( dummyDefn ))), pch);
+        pch = strtok (NULL, ",");
+    }
+}
+
+void freeList(DeviceDefn *head)
+{
+    DeviceDefn * tmp;
+    //
+    while (head != NULL)
+    {
+        tmp = head;
+        head = head->nextItemPtr;
+        tmp->nextItemPtr = NULL;
+        free(tmp);
+    }
 }
