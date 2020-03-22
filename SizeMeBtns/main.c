@@ -38,8 +38,8 @@ char gDeviceDefnStructAnnot[7][2][kTypeDescriptionMaxLen] = {
 WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
 WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
-int readInToDefinitionList( void );
-void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line);
+int readInToDefinitionList( DeviceDefn* );
+void parsePipeDelimited(DeviceDefn* deviceDefnPtrLinkedList, char* line);
 void freeList( DeviceDefn * );
 
 int main(int argc, const char * argv[]) {
@@ -189,7 +189,10 @@ int main(int argc, const char * argv[]) {
     device.diagonalScreenSize = 5.8;
     device.ppi = 458;
     devicesArray[i++] = device;
-
+    
+    DeviceDefn *deviceDefnPtrLinkedList = NULL;
+    int readInErrNo = readInToDefinitionList(deviceDefnPtrLinkedList);
+    
     Executables_Path(filePath);
 
     if (argc > 0) {
@@ -234,8 +237,6 @@ int main(int argc, const char * argv[]) {
                     j++;
                 }
             } else {
-                // DeviceDefn *deviceDefnPtrLinkedList = NULL, *currentItemPtr = NULL, *prevItemPtr;
-                // readInToDefinitionList();
                 j = 0;
                 j = kDevicesArrayLen - 1;
                 while (j > -1) {
@@ -267,16 +268,16 @@ int main(int argc, const char * argv[]) {
             i--;
             j++;
         }
-        
-
-        
-        
+  
     } //end if argc > 0 (args length greater than zero
+    if (readInErrNo == 0) {
+       freeList(deviceDefnPtrLinkedList);
+    }
     printf("\nfinished\n");
     return 0;
 }
 
-int readInToDefinitionList() {
+int readInToDefinitionList(DeviceDefn* deviceDefnPtrLinkedList) {
     int retValue = 0;
     FILE *fp;
     char filePath[PATH_MAX + 1];
@@ -292,7 +293,7 @@ int readInToDefinitionList() {
         printf("sizeof struct = %zu\n", SIZEOFDELIMITEDSTRUCT( dummyDefn ) +1);
 
     } else {
-        DeviceDefn *deviceDefnPtrLinkedList = NULL, *currentItemPtr = NULL, *prevItemPtr;
+        DeviceDefn *currentItemPtr = NULL, *prevItemPtr;
         int scanfResult;
         DeviceDefn dummyDefn;
         char allFieldsLineBuff[199 + 1]; // +1 for pipi separator between struct's field and +1 to that for trailing NULL char/
@@ -307,6 +308,7 @@ int readInToDefinitionList() {
             }
             parsePipeDelimited(currentItemPtr, allFieldsLineBuff);
             prevItemPtr = currentItemPtr;
+            retValue = 0;
         }
         currentItemPtr->nextItemPtr = NULL;
         if (scanfResult != EOF) fprintf( stderr,"invalid data format");
@@ -314,7 +316,6 @@ int readInToDefinitionList() {
          (long unsigned int)ftello(fp), scanResult, strerror(scanResult) );
          */
         fclose(fp);
-        freeList(deviceDefnPtrLinkedList);
     }
     return retValue;
 }
