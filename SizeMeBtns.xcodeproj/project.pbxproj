@@ -36,6 +36,7 @@
 		97A443F220B653DF001B8C18 /* calcScreenWidthHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcScreenWidthHeight.h; sourceTree = "<group>"; };
 		97A443F720B657D1001B8C18 /* deviceDefinitions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deviceDefinitions.c; sourceTree = "<group>"; };
 		97A443F820B657D1001B8C18 /* deviceDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deviceDefinitions.h; sourceTree = "<group>"; };
+		97CD48DC242665CB00090075 /* definitionsData.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = definitionsData.txt; sourceTree = "<group>"; };
 		97DCCE2120CA911E00605355 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -53,6 +54,7 @@
 		978D88A920A915A500B1D58A = {
 			isa = PBXGroup;
 			children = (
+				97CD48DC242665CB00090075 /* definitionsData.txt */,
 				978D88BC20A9183800B1D58A /* Runtime_Environment */,
 				978D88B420A915A500B1D58A /* SizeMeBtns */,
 				978D88B320A915A500B1D58A /* Products */,

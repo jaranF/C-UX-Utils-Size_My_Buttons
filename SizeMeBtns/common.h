@@ -12,10 +12,14 @@
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
 #define kInchesToMMmultiplier       25.4
-#define kDevicesDefnFileName        "./definitionData.txt"
+#define kDevicesDefnFileName        "./definitionsData.txt"
 #define kScanToNewlinePattern       "%[^\n]\n"
 #define kOK                         1
-#define SIZEOFDELIMITEDSTRUCT( A ) sizeof(A.deviceName) + 1 + sizeof(A.CSSPixelDims) + 1 + sizeof(A.PhysicalPixelDims) + 1 + sizeof(A.diagonalScreenSize) + 1 + sizeof(A.ppi)
+#define kTypeDescriptionMaxLen      7
+#define SIZEOFDELIMITEDSTRUCT( A ) ((sizeof(A.deviceName)) + 1 + 12 + 1 + 12 + 1 + 8 + 1 + 6)
+//+1 accounts for delimiter of | pipe; Also +12 for the two ints of CSSPixelDims /PhysicalPixelDims;  +8 for float of diagonalScreenSize; and +6 of the short int of ppi
+// iPhone 5|320|568|640|1136|4|326
+
 typedef struct WHDimsTag {
     float width;
     float height;
@@ -25,11 +29,11 @@ typedef struct WHPixelDimsTag {
     int height;
 } WHPixelDims;
 typedef struct DeviceDefnTag {
-    char deviceName[16];
+    char deviceName[50];
     WHPixelDims CSSPixelDims;
     WHPixelDims PhysicalPixelDims;
     float diagonalScreenSize;
-    int ppi;
+    u_short ppi;
     struct DeviceDefnTag* nextItemPtr;
 } DeviceDefn;
 

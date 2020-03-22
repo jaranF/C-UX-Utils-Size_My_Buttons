@@ -16,6 +16,15 @@
 #include "calcScreenWidthHeight.h"
 #include "common.h"
 
+char gDeviceDefnStructAnnot[7][2][kTypeDescriptionMaxLen] = {
+    {{"string"}, 16},
+    {{"int"}, 6},
+    {{"int"}, 6},
+    {{"int"}, 6},
+    {{"int"}, 6},
+    {{"float"}, 8},
+    {{"int"}, 6}
+};
 
 
 //  I M P R O V E M E N T S    L I S T
@@ -225,6 +234,9 @@ int main(int argc, const char * argv[]) {
                     j++;
                 }
             } else {
+                // DeviceDefn *deviceDefnPtrLinkedList = NULL, *currentItemPtr = NULL, *prevItemPtr;
+                // readInToDefinitionList();
+                j = 0;
                 j = kDevicesArrayLen - 1;
                 while (j > -1) {
                     if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
@@ -236,7 +248,6 @@ int main(int argc, const char * argv[]) {
 	
             i++;
         } //end while argument array count thru
-        readInToDefinitionList();
         i = (j < 0) ? kDevicesArrayLen - 1 : 0;
         j = (j < 0) ? 0 : j;
         while (i > -1) {
@@ -284,9 +295,7 @@ int readInToDefinitionList() {
         DeviceDefn *deviceDefnPtrLinkedList = NULL, *currentItemPtr = NULL, *prevItemPtr;
         int scanfResult;
         DeviceDefn dummyDefn;
-        printf("\n-----\n");
-        printf("sizeof ppi = %zu",sizeof(dummyDefn.ppi));
-        char allFieldsLineBuff[SIZEOFDELIMITEDSTRUCT( dummyDefn ) + 1]; // +1 for pipi separator between struct's field and +1 to that for trailing NULL char/
+        char allFieldsLineBuff[199 + 1]; // +1 for pipi separator between struct's field and +1 to that for trailing NULL char/
         prevItemPtr = NULL;
         //
         while (kOK == (scanfResult = fscanf(fp, kScanToNewlinePattern, allFieldsLineBuff))) {
@@ -313,15 +322,38 @@ int readInToDefinitionList() {
 void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
 {
     char *pch, *base;
-    DeviceDefn dummyDefn;
+    char delim[2] = "|\0";
     base = (char*)destinationStructPtr;
     int i = 0;
-    pch = strtok (line,",");
+    pch = strtok (line, delim);
     while (pch != NULL)
     {
-        //strcpy(destinationStructPtr->field1, pch);
-        strcpy((base + (i++ * SIZEOFDELIMITEDSTRUCT( dummyDefn ))), pch);
-        pch = strtok (NULL, ",");
+        if (i == 0) {
+            strlcpy(destinationStructPtr->deviceName, pch, sizeof(destinationStructPtr->deviceName));
+        }
+        else if (i == 1) {
+            destinationStructPtr->CSSPixelDims.width = atoi(pch);
+        }
+        else if (i == 2) {
+            destinationStructPtr->CSSPixelDims.height = atoi(pch);
+        }
+        else if (i == 3) {
+            destinationStructPtr->PhysicalPixelDims.width = atoi(pch);
+        }
+        else if (i == 4) {
+            destinationStructPtr->PhysicalPixelDims.height = atoi(pch);
+        }
+        else if (i == 5) {
+            destinationStructPtr->diagonalScreenSize = atof(pch);
+        }
+        else if (i == 6) {
+            destinationStructPtr->ppi = atoi(pch);
+        }
+        else  {
+            fprintf(stderr, "Help!");
+        }
+        pch = strtok (NULL, delim);
+        i++;
     }
 }
 
