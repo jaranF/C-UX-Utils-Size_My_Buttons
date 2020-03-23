@@ -11,6 +11,7 @@
 #define kNumOfDifferentUnits        3
 #define kUnitNameBufferSize         3
 #define kDevicesArrayLen            13
+// todo remove above
 #define kInchesToMMmultiplier       25.4
 #define kDevicesDefnFileName        "./definitionsData.txt"
 #define kScanToNewlinePattern       "%[^\n]\n"

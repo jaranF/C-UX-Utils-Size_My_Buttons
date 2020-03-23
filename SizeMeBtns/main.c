@@ -38,7 +38,7 @@ char gDeviceDefnStructAnnot[7][2][kTypeDescriptionMaxLen] = {
 WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
 WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
-int readInToDefinitionList( DeviceDefn* );
+DeviceDefn * readInToDefinitionList( const char* );
 void parsePipeDelimited(DeviceDefn* deviceDefnPtrLinkedList, char* line);
 void freeList( DeviceDefn * );
 
@@ -73,128 +73,15 @@ int main(int argc, const char * argv[]) {
         {{"in"}, kInchesToMMmultiplier * 5}
     };
     i = 0;
-    strcpy(device.deviceName, "iPhone 5");
-    device.CSSPixelDims.width = 320;
-    device.CSSPixelDims.height = 568;
-    device.PhysicalPixelDims.width = 640;
-    device.PhysicalPixelDims.height = 1136;
-    device.diagonalScreenSize = 4;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 5s");
-    device.CSSPixelDims.width = 320;
-    device.CSSPixelDims.height = 568;
-    device.PhysicalPixelDims.width = 640;
-    device.PhysicalPixelDims.height = 1136;
-    device.diagonalScreenSize = 4;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 5c");
-    device.CSSPixelDims.width = 320;
-    device.CSSPixelDims.height = 568;
-    device.PhysicalPixelDims.width = 640;
-    device.PhysicalPixelDims.height = 1136;
-    device.diagonalScreenSize = 4;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 5SE");
-    device.CSSPixelDims.width = 320;
-    device.CSSPixelDims.height = 568;
-    device.PhysicalPixelDims.width = 640;
-    device.PhysicalPixelDims.height = 1136;
-    device.diagonalScreenSize = 4;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 6");
-    device.CSSPixelDims.width = 375;
-    device.CSSPixelDims.height = 667;
-    device.PhysicalPixelDims.width = 750;
-    device.PhysicalPixelDims.height = 1344;
-    device.diagonalScreenSize = 4.7;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 6s");
-    device.CSSPixelDims.width = 375;
-    device.CSSPixelDims.height = 667;
-    device.PhysicalPixelDims.width = 750;
-    device.PhysicalPixelDims.height = 1344;
-    device.diagonalScreenSize = 4.7;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 7");
-    device.CSSPixelDims.width = 375;
-    device.CSSPixelDims.height = 667;
-    device.PhysicalPixelDims.width = 750;
-    device.PhysicalPixelDims.height = 1344;
-    device.diagonalScreenSize = 4.7;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 8");
-    device.CSSPixelDims.width = 375;
-    device.CSSPixelDims.height = 667;
-    device.PhysicalPixelDims.width = 750;
-    device.PhysicalPixelDims.height = 1344;
-    device.diagonalScreenSize = 4.7;
-    device.ppi = 326;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 6+");
-    device.CSSPixelDims.width = 414;
-    device.CSSPixelDims.height = 736;
-    device.PhysicalPixelDims.width = 1080;
-    device.PhysicalPixelDims.height = 1920;
-    device.diagonalScreenSize = 5.51;
-    device.ppi = 401;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 6s+");
-    device.CSSPixelDims.width = 414;
-    device.CSSPixelDims.height = 736;
-    device.PhysicalPixelDims.width = 1080;
-    device.PhysicalPixelDims.height = 1920;
-    device.diagonalScreenSize = 5.5;
-    device.ppi = 401;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 7+");
-    device.CSSPixelDims.width = 414;
-    device.CSSPixelDims.height = 736;
-    device.PhysicalPixelDims.width = 1080;
-    device.PhysicalPixelDims.height = 1920;
-    device.diagonalScreenSize = 5.5;
-    device.ppi = 401;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone 8+");
-    device.CSSPixelDims.width = 414;
-    device.CSSPixelDims.height = 736;
-    device.PhysicalPixelDims.width = 1080;
-    device.PhysicalPixelDims.height = 1920;
-    device.diagonalScreenSize = 5.5;
-    device.ppi = 401;
-    devicesArray[i++] = device;
-        
-    strcpy(device.deviceName, "iPhone X");
-    device.CSSPixelDims.width = 375;
-    device.CSSPixelDims.height = 812;
-    device.PhysicalPixelDims.width = 1125;
-    device.PhysicalPixelDims.height = 2436;
-    device.diagonalScreenSize = 5.8;
-    device.ppi = 458;
-    devicesArray[i++] = device;
-    
-    DeviceDefn *deviceDefnPtrLinkedList = NULL;
-    int readInErrNo = readInToDefinitionList(deviceDefnPtrLinkedList);
-    
+    //
     Executables_Path(filePath);
-
+    DeviceDefn *deviceDefinitionPtrLinkedList = readInToDefinitionList(filePath);
+    if (deviceDefinitionPtrLinkedList == NULL) {
+        fprintf(stderr, "Error couldn't red device definitions file");
+        exit (-1);
+    }
+    DeviceDefn *foundItemPtr, *currentItemPtr = deviceDefinitionPtrLinkedList;
+    foundItemPtr = NULL;
     if (argc > 0) {
         if(strstr(argv[0], filePath) != NULL) {
             userArgsOffset = 1;
@@ -216,15 +103,15 @@ int main(int argc, const char * argv[]) {
                 // Arg starting with a decimal point or number has been found.
                 parseableDimensionSlen = strlen(argv[i]); // Length excluding terminating NULL char.
                 strncpy(unit, (argv[i])+ (parseableDimensionSlen - 2) , 3);
-                int j = 0;
-                
-
-                while (j < kNumOfDifferentUnits) {
+                int k = 0;
+                //
+                //
+                while (k < kNumOfDifferentUnits) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
-                    if ( strcmp(unit, &(unitsConversionTable[j][0][0])) == 0) {
-                        // printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", j, strcmp(unit, &(unitsConversionTable[j][0][0])), unit);
+                    if ( strcmp(unit, &(unitsConversionTable[k][0][0])) == 0) {
+                         printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", k, strcmp(unit, &(unitsConversionTable[k][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
-                        unitConversionMultiplier = (float)(unitsConversionTable[j][1][0]);
+                        unitConversionMultiplier = (float)(unitsConversionTable[k][1][0]);
                         dimensionNumber *= unitConversionMultiplier / 5;    // Do the conversion so dimension is now in millimeters.
                         if (bWidthFound == 0) {
                             bWidthFound = 1;
@@ -234,26 +121,27 @@ int main(int argc, const char * argv[]) {
                         }
                         break;
                     }
-                    j++;
+                    k++;
                 }
             } else {
                 j = 0;
-                j = kDevicesArrayLen - 1;
-                while (j > -1) {
-                    if (strcmp(devicesArray[j].deviceName, argv[i]) == 0) {
+                while (currentItemPtr->nextItemPtr != NULL) {
+                    if (strcmp(currentItemPtr->deviceName, argv[i]) == 0) {
+                        foundItemPtr = currentItemPtr;
                         break;
                     }
-                    j--;
+                    currentItemPtr = currentItemPtr->nextItemPtr;
+                    j++;
                 }
             }
 	
             i++;
         } //end while argument array count thru
-        i = (j < 0) ? kDevicesArrayLen - 1 : 0;
+        i = (j < 0) ? kDevicesArrayLen - 1 : 0; //TODO logic seems to be that if a search thru supplied cmdline args didnt find device name then just set i to all of the devices array. else i is 1 somoutputconverted dims for just one device
         j = (j < 0) ? 0 : j;
-        while (i > -1) {
-            DeviceDefn device = devicesArray[j];
-            WHDims screenXYDimsInMMs = calcScreenWidthHeight(device.CSSPixelDims.width, device.CSSPixelDims.height, device.diagonalScreenSize * kInchesToMMmultiplier);
+        currentItemPtr = foundItemPtr != NULL ? foundItemPtr : deviceDefinitionPtrLinkedList;
+        while (currentItemPtr->nextItemPtr != NULL && i > -1) {
+            WHDims screenXYDimsInMMs = calcScreenWidthHeight(currentItemPtr->CSSPixelDims.width, currentItemPtr->CSSPixelDims.height, currentItemPtr->diagonalScreenSize * kInchesToMMmultiplier);
             // printf("--------------------------------------------------\n");
             //  printf("fWidth = %.2f ",  fWidth);
             // printf("fHeight = %f ", fHeight);
@@ -262,27 +150,25 @@ int main(int argc, const char * argv[]) {
             // printf("%d (height)\n", device.CSSPixelDims.height);
             // printf("%d (ppi)\n", device.ppi);
             // printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
-            WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, device.CSSPixelDims, device.PhysicalPixelDims, device.ppi);
-            printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)", CSSPixelDims.width, CSSPixelDims.height );
+            WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, currentItemPtr->CSSPixelDims, currentItemPtr->PhysicalPixelDims, currentItemPtr->ppi);
+            printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)\n for device \'%s\'", CSSPixelDims.width, CSSPixelDims.height, currentItemPtr->deviceName );
             // printf("\n--------------------------------------------------\n");
             i--;
             j++;
-        }
-  
+        }  
     } //end if argc > 0 (args length greater than zero
-    if (readInErrNo == 0) {
-       freeList(deviceDefnPtrLinkedList);
+    if (deviceDefinitionPtrLinkedList != NULL) {
+       freeList(deviceDefinitionPtrLinkedList);
     }
     printf("\nfinished\n");
     return 0;
 }
 
-int readInToDefinitionList(DeviceDefn* deviceDefnPtrLinkedList) {
+DeviceDefn * readInToDefinitionList(const char* filePath) {
     int retValue = 0;
     FILE *fp;
-    char filePath[PATH_MAX + 1];
-    Executables_Path(filePath);
     fp = fopen(kDevicesDefnFileName, "r" );
+    DeviceDefn *deviceDefnPtrLinkedList;
     if ( NULL == fp ) {
         printf("Error opening file \'%s\'\n", kDevicesDefnFileName);
         printf("In file path...\n");
@@ -317,7 +203,7 @@ int readInToDefinitionList(DeviceDefn* deviceDefnPtrLinkedList) {
          */
         fclose(fp);
     }
-    return retValue;
+    return retValue == 0 ? deviceDefnPtrLinkedList : NULL;
 }
 
 void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
