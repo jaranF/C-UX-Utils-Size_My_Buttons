@@ -12,6 +12,8 @@
 #include <string.h>		/* strcpy   */
 #include <stdlib.h>     /* qsort    */
 #include <mach-o/dyld.h>/* bool */
+#include <limits.h>     /* LONG_MIN / LONG_MAX */
+#include <errno.h>
 #include "calcCSSPixels.h"
 #include "calcScreenWidthHeight.h"
 #include "common.h"
@@ -39,7 +41,9 @@ WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInM
 WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
 DeviceDefn * readInToDefinitionList( const char* );
-void parsePipeDelimited(DeviceDefn* deviceDefnPtrLinkedList, char* line);
+int parsePipeDelimited(DeviceDefn* deviceDefnPtrLinkedList, char* line);
+int checkStrToLongNum(char *charBuff);
+int checkStrToFloat(char *charBuff);
 void freeList( DeviceDefn * );
 
 int main(int argc, const char * argv[]) {
@@ -206,42 +210,40 @@ DeviceDefn * readInToDefinitionList(const char* filePath) {
     return retValue == 0 ? deviceDefnPtrLinkedList : NULL;
 }
 
-void parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
+int parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
 {
-    char *pch, *base;
-    char delim[2] = "|\0";
-    base = (char*)destinationStructPtr;
-    int i = 0;
-    pch = strtok (line, delim);
-    while (pch != NULL)
-    {
-        if (i == 0) {
-            strlcpy(destinationStructPtr->deviceName, pch, sizeof(destinationStructPtr->deviceName));
+    int numOfFmtStrMatches = sscanf (line,"%[^|]|%d|%d|%d|%d|%f|%hd",
+                                     (*destinationStructPtr).deviceName,
+                                     &(destinationStructPtr->CSSPixelDims.width),
+                                     &(destinationStructPtr->CSSPixelDims.height),
+                                     &(destinationStructPtr->PhysicalPixelDims.width),
+                                     &(destinationStructPtr->PhysicalPixelDims.height),
+                                     &(destinationStructPtr->diagonalScreenSize),
+                                     &(destinationStructPtr->ppi)
+                                     );
+    printf("\n-------------\nnumOfFmtStrMatches = %zu\n-------------\n", LONG_MAX);
+    if (numOfFmtStrMatches != 7) { //Determine where error is
+        if (1 != (sscanf (line, "%[^|]|", (*destinationStructPtr).deviceName))) {
+            fprintf(stderr, "Error parsing Devices Definition data file. Expected \'|\' (PIPE delimited lines with first item being device name (i.e. \'iPhone X\')");
+        } else {
+            char delim[2] = "|\0";
+            char *pch = strtok(line, delim);
+            int i = 0;
+            while (pch != NULL)
+            {
+                if (i == 5 && checkStrToFloat(pch) != 0) {
+                    fprintf(stderr, "Error parsing Devices Definition data file. Expected one float in 6th position of | (PIPE) delimited line");
+                } else if (i && checkStrToLongNum(pch) != 0) {
+                     fprintf(stderr, "Error parsing Devices Definition data file. Expected four ints (long precision) after device name all delimited by pipe");
+                }
+                pch = strtok (NULL, delim);
+                i++;
+            }
+            
         }
-        else if (i == 1) {
-            destinationStructPtr->CSSPixelDims.width = atoi(pch);
-        }
-        else if (i == 2) {
-            destinationStructPtr->CSSPixelDims.height = atoi(pch);
-        }
-        else if (i == 3) {
-            destinationStructPtr->PhysicalPixelDims.width = atoi(pch);
-        }
-        else if (i == 4) {
-            destinationStructPtr->PhysicalPixelDims.height = atoi(pch);
-        }
-        else if (i == 5) {
-            destinationStructPtr->diagonalScreenSize = atof(pch);
-        }
-        else if (i == 6) {
-            destinationStructPtr->ppi = atoi(pch);
-        }
-        else  {
-            fprintf(stderr, "Help!");
-        }
-        pch = strtok (NULL, delim);
-        i++;
+        return -1;
     }
+    return 0;
 }
 
 void freeList(DeviceDefn *head)
@@ -255,4 +257,36 @@ void freeList(DeviceDefn *head)
         tmp->nextItemPtr = NULL;
         free(tmp);
     }
+}
+
+int checkStrToLongNum(char *charBuff) {
+    char c = '\0';
+    char *pEnd = &c;
+    errno = 0;
+    long int result = strtol(charBuff, &pEnd, 10);
+    if ((result == LONG_MAX || result == LONG_MIN) && errno != 0)
+    {
+        return -1; // Under / Over -flow
+    }
+    if (*pEnd != '\0')
+    {
+        return -2; // Extra garbage to the right of chars parseable as valid number.
+    }
+    return 0;
+}
+
+int checkStrToFloat(char *charBuff) {
+    char c = '\0';
+    char *pEnd = &c;
+    errno = 0;
+    strtof(charBuff, &pEnd);
+    if (errno == ERANGE)
+    {
+        return -1;
+    }
+    if (*pEnd != '\0')
+    {
+        return -2;
+    }
+    return 0;
 }
