@@ -9,13 +9,13 @@
 #include "common.h"
 
 
-WHPixelDims calcCSSPixels(float width, float height, WHDims  screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
+WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenWidthHeightInMM, WidthHeightDims CSSPixelDims, WidthHeightDims PhysicalPixelDims, int screenPPI);
 
-WHPixelDims calcCSSPixels(float width, float height, WHDims  screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI) {
-    WHPixelDims calculatedCSSPixelDims;
+WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenWidthHeightInMM, WidthHeightDims CSSPixelDims, WidthHeightDims PhysicalPixelDims, int screenPPI) {
+    WidthHeightDims calculatedCSSPixelDims;
     float screenPPMM = (screenPPI / kInchesToMMmultiplier);
-    calculatedCSSPixelDims.width = (width * screenPPMM) / (PhysicalPixelDims.width / CSSPixelDims.width);
-    calculatedCSSPixelDims.height = (height * screenPPMM) / (PhysicalPixelDims.height / CSSPixelDims.height);
-
+    calculatedCSSPixelDims.width.inPixels = (width * screenPPMM) / (PhysicalPixelDims.width.inPixels / CSSPixelDims.width.inPixels);
+    calculatedCSSPixelDims.height.inPixels = (height * screenPPMM) / (PhysicalPixelDims.height.inPixels / CSSPixelDims.height.inPixels);
     return calculatedCSSPixelDims;
 }
+// screenDimsInMM.height.inMMs = heightInMM;

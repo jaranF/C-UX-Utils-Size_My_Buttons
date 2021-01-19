@@ -31,14 +31,15 @@ char gDeviceDefnStructAnnot[7][2][kTypeDescriptionMaxLen] = {
 
 //  I M P R O V E M E N T S    L I S T
 // ==================================
-// 0\ Change use of #define macro labels to clearer names.
-// 1\ Use typedefs.
-// 2\ Persist the DevicesDefinitions data to a file that is read in as a linked list.
-// 3\ Use union instead of two separate largely similar structs 'struct WHDims' and 'struct WHPixelDims'.
-// 4\ Separate out into separate files.
+// 0\  ̶C̶h̶a̶n̶g̶e̶ ̶u̶s̶e̶ ̶o̶f̶ ̶#̶d̶e̶f̶i̶n̶e̶ ̶m̶a̶c̶r̶o̶ ̶l̶a̶b̶e̶l̶s̶ ̶t̶o̶ ̶c̶l̶e̶a̶r̶e̶r̶ ̶n̶a̶m̶e̶s̶ ̶ ̶
+// 1\  ̶U̶s̶e̶ ̶t̶y̶p̶e̶d̶e̶f̶s̶.̶ ̶ ̶
+// 2\  ̶P̶e̶r̶s̶i̶s̶t̶ ̶t̶h̶e̶ ̶D̶e̶v̶i̶c̶e̶s̶D̶e̶f̶i̶n̶i̶t̶i̶o̶n̶s̶ ̶d̶a̶t̶a̶ ̶t̶o̶ ̶a̶ ̶f̶i̶l̶e̶ ̶t̶h̶a̶t̶ ̶i̶s̶ ̶r̶e̶a̶d̶ ̶i̶n̶ ̶a̶s̶ ̶a̶ ̶l̶i̶n̶k̶e̶d̶ ̶l̶i̶s̶t̶.̶ ̶ ̶
+// 3\  ̶U̶s̶e̶ ̶u̶n̶i̶o̶n̶ ̶i̶n̶s̶t̶e̶a̶d̶ ̶o̶f̶ ̶t̶w̶o̶ ̶s̶e̶p̶a̶r̶a̶t̶e̶ ̶l̶a̶r̶g̶e̶l̶y̶ ̶s̶i̶m̶i̶l̶a̶r̶ ̶s̶t̶r̶u̶c̶t̶s̶ ̶s̶t̶r̶u̶c̶t̶ ̶W̶H̶D̶i̶m̶s̶ ̶a̶n̶d̶ ̶s̶t̶r̶u̶c̶t̶ ̶W̶H̶P̶i̶x̶e̶l̶D̶i̶m̶s̶.̶ ̶ ̶ ̶
+// 4\ Employ use of CONSTs where appropriate.
+// 5\ Separate out into separate files.
 
-WHPixelDims calcCSSPixels(float width, float height, WHDims screenWidthHeightInMM, WHPixelDims CSSPixelDims, WHPixelDims PhysicalPixelDims, int screenPPI);
-WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
+WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenWidthHeightInMM, WidthHeightDims CSSPixelDims, WidthHeightDims PhysicalPixelDims, int screenPPI);
+WidthHeightDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 char* Executables_Path( char* );
 DeviceDefn * readInToDefinitionList( const char* );
 int parsePipeDelimited(DeviceDefn* deviceDefnPtrLinkedList, char* line);
@@ -145,17 +146,18 @@ int main(int argc, const char * argv[]) {
         j = (j < 0) ? 0 : j;
         currentItemPtr = foundItemPtr != NULL ? foundItemPtr : deviceDefinitionPtrLinkedList;
         while (currentItemPtr->nextItemPtr != NULL && i > -1) {
-            WHDims screenXYDimsInMMs = calcScreenWidthHeight(currentItemPtr->CSSPixelDims.width, currentItemPtr->CSSPixelDims.height, currentItemPtr->diagonalScreenSize * kInchesToMMmultiplier);
+            WidthHeightDims screenXYDimsInMMs = calcScreenWidthHeight(currentItemPtr->CSSPixelDims.width.inPixels, currentItemPtr->CSSPixelDims.height.inPixels, currentItemPtr->diagonalScreenSize * kInchesToMMmultiplier);
+            
             // printf("--------------------------------------------------\n");
-            //  printf("fWidth = %.2f ",  fWidth);
-            // printf("fHeight = %f ", fHeight);
+            //  printf("fWidth = %.2f ",  screenXYDimsInMMs.width.inMMs);
+            // printf("fHeight = %f ", screenXYDimsInMMs.height.inMMs);
             // printf("\n%s\n", device.deviceName);
             // printf("%d (width)\n", device.CSSPixelDims.width);
             // printf("%d (height)\n", device.CSSPixelDims.height);
             // printf("%d (ppi)\n", device.ppi);
             // printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
-            WHPixelDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, currentItemPtr->CSSPixelDims, currentItemPtr->PhysicalPixelDims, currentItemPtr->ppi);
-            printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)\n for device \'%s\'", CSSPixelDims.width, CSSPixelDims.height, currentItemPtr->deviceName );
+            WidthHeightDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, currentItemPtr->CSSPixelDims, currentItemPtr->PhysicalPixelDims, currentItemPtr->ppi);
+            printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)\n for device \'%s\'", CSSPixelDims.width.inPixels, CSSPixelDims.height.inPixels, currentItemPtr->deviceName );
             // printf("\n--------------------------------------------------\n");
             i--;
             j++;
@@ -172,7 +174,7 @@ DeviceDefn * readInToDefinitionList(const char* filePath) {
     int retValue = 0;
     FILE *fp;
     fp = fopen(kDevicesDefnFileName, "r" );
-    DeviceDefn *deviceDefnPtrLinkedList;
+    DeviceDefn *deviceDefnPtrLinkedList = NULL;
     if ( NULL == fp ) {
         printf("Error opening file \'%s\'\n", kDevicesDefnFileName);
         printf("In file path...\n");
@@ -185,7 +187,6 @@ DeviceDefn * readInToDefinitionList(const char* filePath) {
     } else {
         DeviceDefn *currentItemPtr = NULL, *prevItemPtr;
         int scanfResult;
-        DeviceDefn dummyDefn;
         char allFieldsLineBuff[199 + 1]; // +1 for pipi separator between struct's field and +1 to that for trailing NULL char/
         prevItemPtr = NULL;
         //
@@ -214,14 +215,14 @@ int parsePipeDelimited(DeviceDefn* destinationStructPtr, char* line)
 {
     int numOfFmtStrMatches = sscanf (line,"%[^|]|%d|%d|%d|%d|%f|%hd",
                                      (*destinationStructPtr).deviceName,
-                                     &(destinationStructPtr->CSSPixelDims.width),
-                                     &(destinationStructPtr->CSSPixelDims.height),
-                                     &(destinationStructPtr->PhysicalPixelDims.width),
-                                     &(destinationStructPtr->PhysicalPixelDims.height),
+                                     &(destinationStructPtr->CSSPixelDims.width.inPixels),
+                                     &(destinationStructPtr->CSSPixelDims.height.inPixels),
+                                     &(destinationStructPtr->PhysicalPixelDims.width.inPixels),
+                                     &(destinationStructPtr->PhysicalPixelDims.height.inPixels),
                                      &(destinationStructPtr->diagonalScreenSize),
                                      &(destinationStructPtr->ppi)
                                      );
-    printf("\n-------------\nnumOfFmtStrMatches = %zu\n-------------\n", LONG_MAX);
+    //printf("\n-------------\nnumOfFmtStrMatches = %zu\n-------------\n", LONG_MAX);
     if (numOfFmtStrMatches != 7) { //Determine where error is
         if (1 != (sscanf (line, "%[^|]|", (*destinationStructPtr).deviceName))) {
             fprintf(stderr, "Error parsing Devices Definition data file. Expected \'|\' (PIPE delimited lines with first item being device name (i.e. \'iPhone X\')");

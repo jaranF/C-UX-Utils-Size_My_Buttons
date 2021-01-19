@@ -9,15 +9,15 @@
 #include "common.h"
 
 
-WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
+WidthHeightDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM);
 
-WHDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM){
-    WHDims screenDimsInMM;
+WidthHeightDims calcScreenWidthHeight(int widthInPixels, int heightInPixels, float screenDiagnalSizeInMM){
+    WidthHeightDims screenDimsInMM;
     int heightSquared = heightInPixels * heightInPixels;
     int widthSquared = widthInPixels * widthInPixels;
     float heightInMM = sqrt(((screenDiagnalSizeInMM * screenDiagnalSizeInMM) * heightSquared) / (widthSquared + heightSquared));
     // Math.sqrt((((4 * 2.54) * (4* 2.54)) * (  (568) * (568)   )) / ( ((320) * (320) ) + (568 * 568)   ))
-    screenDimsInMM.height = heightInMM;
-    screenDimsInMM.width  = heightInMM * (float)widthInPixels / (float)heightInPixels;
+    screenDimsInMM.height.inMMs = heightInMM;
+    screenDimsInMM.width.inMMs  = heightInMM * (float)widthInPixels / (float)heightInPixels;
     return screenDimsInMM;
 }

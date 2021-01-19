@@ -21,18 +21,22 @@
 //+1 accounts for delimiter of | pipe; Also +12 for the two ints of CSSPixelDims /PhysicalPixelDims;  +8 for float of diagonalScreenSize; and +6 of the short int of ppi
 // iPhone 5|320|568|640|1136|4|326
 
-typedef struct WHDimsTag {
-    float width;
-    float height;
-} WHDims;
-typedef struct WHPixelDimsTag {
-    int width;
-    int height;
-} WHPixelDims;
+union WidthDimension {
+    double inMMs;
+    int inPixels;
+};
+union HeightDimension {
+    double inMMs;
+    int inPixels;
+};
+typedef struct  {
+    union WidthDimension width;
+    union HeightDimension height;
+} WidthHeightDims;
 typedef struct DeviceDefnTag {
     char deviceName[50];
-    WHPixelDims CSSPixelDims;
-    WHPixelDims PhysicalPixelDims;
+    WidthHeightDims CSSPixelDims;
+    WidthHeightDims PhysicalPixelDims;
     float diagonalScreenSize;
     u_short ppi;
     struct DeviceDefnTag* nextItemPtr;
