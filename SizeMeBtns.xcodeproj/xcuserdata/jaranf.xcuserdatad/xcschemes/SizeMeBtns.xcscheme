@@ -67,11 +67,11 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "30.8mm"
+            argument = "3.08cm"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "100.3095mm"
+            argument = "10.03095cm"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -16,7 +16,6 @@
 #define kDevicesDefnFileName        "./definitionsData.txt"
 #define kScanToNewlinePattern       "%[^\n]\n"
 #define kOK                         1
-#define kTypeDescriptionMaxLen      7
 #define SIZEOFDELIMITEDSTRUCT( A ) ((sizeof(A.deviceName)) + 1 + 12 + 1 + 12 + 1 + 8 + 1 + 6)
 //+1 accounts for delimiter of | pipe; Also +12 for the two ints of CSSPixelDims /PhysicalPixelDims;  +8 for float of diagonalScreenSize; and +6 of the short int of ppi
 // iPhone 5|320|568|640|1136|4|326

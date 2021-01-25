@@ -18,17 +18,6 @@
 #include "calcScreenWidthHeight.h"
 #include "common.h"
 
-char gDeviceDefnStructAnnot[7][2][kTypeDescriptionMaxLen] = {
-    {{"string"}, 16},
-    {{"int"}, 6},
-    {{"int"}, 6},
-    {{"int"}, 6},
-    {{"int"}, 6},
-    {{"float"}, 8},
-    {{"int"}, 6}
-};
-
-
 //  I M P R O V E M E N T S    L I S T
 // ==================================
 // 0\  ̶C̶h̶a̶n̶g̶e̶ ̶u̶s̶e̶ ̶o̶f̶ ̶#̶d̶e̶f̶i̶n̶e̶ ̶m̶a̶c̶r̶o̶ ̶l̶a̶b̶e̶l̶s̶ ̶t̶o̶ ̶c̶l̶e̶a̶r̶e̶r̶ ̶n̶a̶m̶e̶s̶ ̶ ̶
@@ -114,7 +103,7 @@ int main(int argc, const char * argv[]) {
                 while (k < kNumOfDifferentUnits) {
                     //printf("\n-------------\n%s\n", unitLookup[j].unit);printf("%s",unit);
                     if ( strcmp(unit, &(unitsConversionTable[k][0][0])) == 0) {
-                         printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", k, strcmp(unit, &(unitsConversionTable[k][0][0])), unit);
+                        // printf("FOUND UNIT strncmp %d = %d ... and unit is \'%s\'\n", k, strcmp(unit, &(unitsConversionTable[k][0][0])), unit);
                         dimensionNumber = atof(argv[i]); // atoi discards initial whitespace interprets a number and additional chars after the part which it regards can be made into a number are discarded. Also atof() to convert to float
                         unitConversionMultiplier = (float)(unitsConversionTable[k][1][0]);
                         dimensionNumber *= unitConversionMultiplier / 5;    // Do the conversion so dimension is now in millimeters.
