@@ -82,7 +82,7 @@ int main(int argc, const char * argv[]) {
     Executables_Path(filePath);
     DeviceDefn *deviceDefinitionPtrLinkedList = readInToDefinitionList(filePath);
     if (deviceDefinitionPtrLinkedList == NULL) {
-        fprintf(stderr, "Error couldn't red device definitions file");
+        fprintf(stderr, "Error couldn't read device definitions file");
         exit (-1);
     }
     DeviceDefn *foundItemPtr, *currentItemPtr = deviceDefinitionPtrLinkedList;
