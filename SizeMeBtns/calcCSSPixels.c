@@ -13,7 +13,7 @@ WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenW
 
 WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenWidthHeightInMM, WidthHeightDims CSSPixelDims, WidthHeightDims PhysicalPixelDims, int screenPPI) {
     WidthHeightDims calculatedCSSPixelDims;
-    float screenPPMM = (screenPPI / kInchesToMMmultiplier);
+    const float screenPPMM = (screenPPI / kInchesToMMmultiplier);  //Pixels per MilliMeter
     calculatedCSSPixelDims.width.inPixels = (width * screenPPMM) / (PhysicalPixelDims.width.inPixels / CSSPixelDims.width.inPixels);
     calculatedCSSPixelDims.height.inPixels = (height * screenPPMM) / (PhysicalPixelDims.height.inPixels / CSSPixelDims.height.inPixels);
     return calculatedCSSPixelDims;

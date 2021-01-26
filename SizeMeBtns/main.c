@@ -24,7 +24,7 @@
 // 1\  ̶U̶s̶e̶ ̶t̶y̶p̶e̶d̶e̶f̶s̶.̶ ̶ ̶
 // 2\  ̶P̶e̶r̶s̶i̶s̶t̶ ̶t̶h̶e̶ ̶D̶e̶v̶i̶c̶e̶s̶D̶e̶f̶i̶n̶i̶t̶i̶o̶n̶s̶ ̶d̶a̶t̶a̶ ̶t̶o̶ ̶a̶ ̶f̶i̶l̶e̶ ̶t̶h̶a̶t̶ ̶i̶s̶ ̶r̶e̶a̶d̶ ̶i̶n̶ ̶a̶s̶ ̶a̶ ̶l̶i̶n̶k̶e̶d̶ ̶l̶i̶s̶t̶.̶ ̶ ̶
 // 3\  ̶U̶s̶e̶ ̶u̶n̶i̶o̶n̶ ̶i̶n̶s̶t̶e̶a̶d̶ ̶o̶f̶ ̶t̶w̶o̶ ̶s̶e̶p̶a̶r̶a̶t̶e̶ ̶l̶a̶r̶g̶e̶l̶y̶ ̶s̶i̶m̶i̶l̶a̶r̶ ̶s̶t̶r̶u̶c̶t̶s̶ ̶s̶t̶r̶u̶c̶t̶ ̶W̶H̶D̶i̶m̶s̶ ̶a̶n̶d̶ ̶s̶t̶r̶u̶c̶t̶ ̶W̶H̶P̶i̶x̶e̶l̶D̶i̶m̶s̶.̶ ̶ ̶ ̶
-// 4\ Employ use of CONSTs where appropriate.
+// 4\  ̶E̶m̶p̶l̶o̶y̶ ̶u̶s̶e̶ ̶o̶f̶ ̶C̶O̶N̶S̶T̶s̶ ̶w̶h̶e̶r̶e̶ ̶a̶p̶p̶r̶o̶p̶r̶i̶a̶t̶e̶.̶ ̶ ̶
 // 5\ Separate out into separate files.
 
 WidthHeightDims calcCSSPixels(float width, float height, WidthHeightDims screenWidthHeightInMM, WidthHeightDims CSSPixelDims, WidthHeightDims PhysicalPixelDims, int screenPPI);
@@ -41,8 +41,8 @@ int main(int argc, const char * argv[]) {
     int userArgsOffset;
     char filePath[PATH_MAX + 1];
     
-    char switchParamHelp[7] = "--help\0";
-    char validCharsForOfNumber[12] = ".0123456789\0";
+    const char switchParamHelp[7] = "--help\0";
+    const char validCharsForOfNumber[12] = ".0123456789\0";
 
     float dimensionNumber;
     int bWidthFound = 0; // FALSE
@@ -61,7 +61,7 @@ int main(int argc, const char * argv[]) {
     // number using the most staightforward option which is to multiply
     // by 10. Instead I used a lower multiplie, i.e. 5, to keep the
     // numbers below 128 but still have the converted to whole integers.
-    char unitsConversionTable[kNumOfDifferentUnits][2][kUnitNameBufferSize] = {
+    const char unitsConversionTable[kNumOfDifferentUnits][2][kUnitNameBufferSize] = {
         {{"mm"}, 5},
         {{"cm"}, 50},
         {{"in"}, kInchesToMMmultiplier * 5}
@@ -135,7 +135,7 @@ int main(int argc, const char * argv[]) {
         j = (j < 0) ? 0 : j;
         currentItemPtr = foundItemPtr != NULL ? foundItemPtr : deviceDefinitionPtrLinkedList;
         while (currentItemPtr->nextItemPtr != NULL && i > -1) {
-            WidthHeightDims screenXYDimsInMMs = calcScreenWidthHeight(currentItemPtr->CSSPixelDims.width.inPixels, currentItemPtr->CSSPixelDims.height.inPixels, currentItemPtr->diagonalScreenSize * kInchesToMMmultiplier);
+            const WidthHeightDims screenXYDimsInMMs = calcScreenWidthHeight(currentItemPtr->CSSPixelDims.width.inPixels, currentItemPtr->CSSPixelDims.height.inPixels, currentItemPtr->diagonalScreenSize * kInchesToMMmultiplier);
             
             // printf("--------------------------------------------------\n");
             //  printf("fWidth = %.2f ",  screenXYDimsInMMs.width.inMMs);
@@ -145,7 +145,7 @@ int main(int argc, const char * argv[]) {
             // printf("%d (height)\n", device.CSSPixelDims.height);
             // printf("%d (ppi)\n", device.ppi);
             // printf("%.6f width (mm), %.6f (height)\n", screenXYDimsInMMs.width, screenXYDimsInMMs.height);
-            WidthHeightDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, currentItemPtr->CSSPixelDims, currentItemPtr->PhysicalPixelDims, currentItemPtr->ppi);
+            const WidthHeightDims CSSPixelDims = calcCSSPixels(fWidth, fHeight, screenXYDimsInMMs, currentItemPtr->CSSPixelDims, currentItemPtr->PhysicalPixelDims, currentItemPtr->ppi);
             printf("CSS PIXEL DIMENSIONS TO YEILD DESIRED PHYSICAL SIZE ARE (width = %dpx), (height = %dpx)\n for device \'%s\'", CSSPixelDims.width.inPixels, CSSPixelDims.height.inPixels, currentItemPtr->deviceName );
             // printf("\n--------------------------------------------------\n");
             i--;
