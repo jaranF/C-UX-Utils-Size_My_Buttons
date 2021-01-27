@@ -155,7 +155,6 @@ int main(int argc, const char * argv[]) {
     if (deviceDefinitionPtrLinkedList != NULL) {
        freeList(deviceDefinitionPtrLinkedList);
     }
-    printf("\nfinished\n");
     return 0;
 }
 
